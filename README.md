@@ -2,11 +2,15 @@
 
 Personal website built with Astro and Tailwind CSS.
 
+## ADRs
+
+- [V0.0_astro-hosting.md](./DOCS/ADRs/V0.0_astro-hosting.md)
+
 ## Development Setup
 
 ### Prerequisites
 - Node.js (v18+)
-- npm/pnpm/yarn
+- npm
 
 ### Local Development
 
