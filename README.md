@@ -13,8 +13,8 @@ Personal website built with Astro and Tailwind CSS.
 1. Clone the repository
 
 ```bash
-git clone 
-cd ...
+git clone https://github.com/Reed-Turgeon-Domain/landingpage.git
+cd landingpage
 ```
 
 2. Install dependencies
