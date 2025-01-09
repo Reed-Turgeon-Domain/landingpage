@@ -1,0 +1,62 @@
+# Name of the workflow that will appear in GitHub Actions
+name: Deploy to GitHub Pages
+
+# Define when this workflow will run
+on:
+  push:
+    branches: [ "main" ]  # Trigger on push to main branch
+  workflow_dispatch:      # Allow manual trigger from GitHub UI
+
+# Set required permissions
+permissions:
+  contents: read         # Need to read repository contents
+  pages: write          # Need to deploy to Pages
+  id-token: write       # Need to verify deployment
+
+# Ensure only one deployment happens at a time
+concurrency:
+  group: "pages"
+  cancel-in-progress: false  # Don't cancel in-progress deployments
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Get the code from the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # Step 2: Configure GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      # Step 3: Build your site
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+      
+      # Step 4: Package the built files for deployment
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'  # Directory containing your built site files
+
+  # Separate job for deployment
+  deploy:
+    needs: build           # Wait for build job to complete
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}  # Sets the deployment URL
+    steps:
+      # Deploy the built site to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
