@@ -16,10 +16,10 @@ function CircularMenu() {
   const circleRef = useRef<HTMLDivElement>(null)
 
   const menuItems: MenuItem[] = [
-    { label: "Item 1", angle: 0 },
-    { label: "Item 2", angle: Math.PI / 2 },
-    { label: "Item 3", angle: Math.PI },
-    { label: "Item 4", angle: 3 * Math.PI / 2 },
+    { label: "Item 1", angle: -Math.PI / 4 },
+    { label: "Item 2", angle: Math.PI / 4 },
+    { label: "Item 3", angle: 3 * Math.PI / 4 },
+    { label: "Item 4", angle: 5 * Math.PI / 4 },
   ]
 
   const constrainToViewport = (x: number, y: number): Point => {
