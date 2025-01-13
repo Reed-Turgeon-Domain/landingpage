@@ -141,6 +141,15 @@ function CircularMenu() {
     return baseStyle
   }
 
+  const shouldShowBall = () => {
+    if (!activeLink) return true
+    
+    // Check if any menu item is visible when there's an active link
+    return !menuItems.some(item => 
+      item.label === activeLink && getItemVisibility(item.angle, item.label) > 0
+    )
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
       <div 
@@ -168,10 +177,12 @@ function CircularMenu() {
             )}
           </div>
         ))}
-        <div 
-          className="fixed w-4 h-4 bg-orange-500/80 rounded-full"
-          style={getBallPosition()}
-        />
+        {shouldShowBall() && (
+          <div 
+            className="fixed w-4 h-4 bg-orange-500/80 rounded-full"
+            style={getBallPosition()}
+          />
+        )}
       </div>
 
       <div className="hidden fixed top-4 left-4 text-black/50">
