@@ -20,7 +20,7 @@ function CircularMenu() {
   const menuItems: MenuItem[] = [
     { label: "Learn Like Me", angle: -Math.PI / 4, href: "https://llm.reedturgeon.com" },
     { label: "LinkedIn", angle: Math.PI / 4, href: "https://www.linkedin.com/in/reedturgeon" },
-    { label: "GitHub", angle: 3 * Math.PI / 4, href: "https://github.com/reedturgeon" },
+    { label: "GitHub", angle: 3 * Math.PI / 4, href: "https://github.com/MrT3313" },
   ]
 
   const constrainToViewport = (x: number, y: number): Point => {
