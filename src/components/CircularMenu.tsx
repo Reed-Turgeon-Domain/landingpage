@@ -8,6 +8,7 @@ type Point = {
 type MenuItem = {
   label: string
   angle: number
+  href?: string
 }
 
 function CircularMenu() {
@@ -16,7 +17,7 @@ function CircularMenu() {
   const circleRef = useRef<HTMLDivElement>(null)
 
   const menuItems: MenuItem[] = [
-    { label: "Item 1", angle: -Math.PI / 4 },
+    { label: "Learn Like Me", angle: -Math.PI / 4, href: "https://llm.reedturgeon.com" },
     { label: "Item 2", angle: Math.PI / 4 },
     { label: "Item 3", angle: 3 * Math.PI / 4 },
     { label: "Item 4", angle: 5 * Math.PI / 4 },
@@ -101,6 +102,18 @@ function CircularMenu() {
     }
   }
 
+  const getItemStyle = (item: MenuItem) => {
+    const baseStyle = getItemPosition(item.angle)
+    if (item.label === "Learn Like Me") {
+      return {
+        ...baseStyle,
+        backgroundColor: '#6464F0',
+        color: 'white',
+      }
+    }
+    return baseStyle
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
       <div 
@@ -110,10 +123,22 @@ function CircularMenu() {
         {menuItems.map((item, index) => (
           <div
             key={index}
-            className="absolute left-1/2 top-1/2 px-4 py-2 bg-white rounded-lg shadow-md pointer-events-auto"
-            style={getItemPosition(item.angle)}
+            className="absolute left-1/2 top-1/2 px-4 py-2 rounded-lg shadow-md pointer-events-auto"
+            style={getItemStyle(item)}
           >
-            {item.label}
+            {item.href ? (
+              <a 
+                href={item.href} 
+                className="no-underline hover:opacity-80" 
+                style={{ color: 'inherit' }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.label}
+              </a>
+            ) : (
+              item.label
+            )}
           </div>
         ))}
         <div 
