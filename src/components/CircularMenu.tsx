@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
+import { FaGithub } from "react-icons/fa"
+import { FaLinkedin } from "react-icons/fa";
+
 
 type Point = {
   x: number
@@ -9,6 +12,7 @@ type MenuItem = {
   label: string
   angle: number
   href?: string
+  icon?: React.ReactNode
 }
 
 function CircularMenu() {
@@ -18,9 +22,21 @@ function CircularMenu() {
   const circleRef = useRef<HTMLDivElement>(null)
 
   const menuItems: MenuItem[] = [
-    { label: "Learn Like Me", angle: -Math.PI / 4, href: "https://llm.reedturgeon.com" },
-    { label: "LinkedIn", angle: Math.PI / 4, href: "https://www.linkedin.com/in/reedturgeon" },
-    { label: "GitHub", angle: 3 * Math.PI / 4, href: "https://github.com/MrT3313" },
+    { label: "Learn Like Me", 
+      angle: -Math.PI / 4, 
+      href: "https://llm.reedturgeon.com" },
+    { label: "LinkedIn", 
+      angle: Math.PI / 4, 
+      href: "https://www.linkedin.com/in/reedturgeon" , 
+      icon: <div style={{ marginTop: '1px' }}>
+        <FaLinkedin size={25} />
+      </div>},
+    { label: "GitHub", 
+      angle: 3 * Math.PI / 4, 
+      href: "https://github.com/MrT3313", 
+      icon: <div style={{ marginTop: '1px' }}>
+        <FaGithub size={25}/>
+      </div> },
   ]
 
   const constrainToViewport = (x: number, y: number): Point => {
@@ -136,6 +152,9 @@ function CircularMenu() {
         ...baseStyle,
         backgroundColor: '#171515',
         color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
       }
     }
     return baseStyle
@@ -150,6 +169,8 @@ function CircularMenu() {
     )
   }
 
+  const version = `V1.1-Icons`
+
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
       <div 
@@ -159,18 +180,18 @@ function CircularMenu() {
         {menuItems.map((item, index) => (
           <div
             key={index}
-            className="absolute left-1/2 top-1/2 px-4 py-2 rounded-lg shadow-md pointer-events-auto"
+            className="absolute left-1/2 top-1/2 px-2 py-1 rounded-lg shadow-md pointer-events-auto"
             style={getItemStyle(item)}
           >
             {item.href ? (
               <a 
                 href={item.href} 
-                className="no-underline hover:opacity-80" 
+                className="no-underline hover:opacity-80 flex items-center gap-2" 
                 style={{ color: 'inherit' }}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {item.label}
+                {item?.icon ? item.icon : item.label}
               </a>
             ) : (
               item.label
