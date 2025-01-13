@@ -11,8 +11,8 @@ function CircularMenu() {
   const circleRef = useRef<HTMLDivElement>(null)
 
   const constrainToViewport = (x: number, y: number): Point => {
-    const ballSize = 16 // w-4 = 16px
-    const padding = 4 // Small padding from viewport edge
+    const ballSize = 16
+    const padding = 4
     
     return {
       x: Math.min(Math.max(x, ballSize/2 + padding), window.innerWidth - ballSize/2 - padding),
@@ -48,11 +48,9 @@ function CircularMenu() {
     const centerY = rect.top + rect.height / 2
     const radius = rect.width / 2
 
-    // Calculate position on circle
     const rawX = centerX + Math.cos(angle) * radius
     const rawY = centerY + Math.sin(angle) * radius
 
-    // Constrain to viewport
     const { x, y } = constrainToViewport(rawX, rawY)
 
     return {
@@ -63,18 +61,18 @@ function CircularMenu() {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
       <div 
         ref={circleRef}
-        className="relative w-[600px] h-[600px] border-2 border-white rounded-full"
+        className="relative w-[600px] h-[600px] border-2 border-black/30 border-dashed rounded-full"
       >
         <div 
-          className="fixed w-4 h-4 bg-orange-500 rounded-full"
+          className="fixed w-4 h-4 bg-orange-500/80 rounded-full"
           style={getBallPosition()}
         />
       </div>
 
-      <div className="fixed top-4 left-4 text-white">
+      <div className="fixed top-4 left-4 text-black/50">
         Mouse: {Math.round(mousePos.x)}, {Math.round(mousePos.y)}
         <br />
         Angle: {Math.round(angle * 180 / Math.PI)}°
