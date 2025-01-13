@@ -72,7 +72,7 @@ function CircularMenu() {
         />
       </div>
 
-      <div className="fixed top-4 left-4 text-black/50">
+      <div className="hidden fixed top-4 left-4 text-black/50">
         Mouse: {Math.round(mousePos.x)}, {Math.round(mousePos.y)}
         <br />
         Angle: {Math.round(angle * 180 / Math.PI)}°
