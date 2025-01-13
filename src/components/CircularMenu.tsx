@@ -154,7 +154,7 @@ function CircularMenu() {
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
       <div 
         ref={circleRef}
-        className="relative w-[600px] h-[600px] border-2 border-black/30 border-dashed rounded-full"
+        className="relative w-[400px] h-[400px] border-2 border-black border-dashed rounded-full"
       >
         {menuItems.map((item, index) => (
           <div
