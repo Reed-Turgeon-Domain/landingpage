@@ -6,7 +6,6 @@ import CircularMenu from '../components/CircularMenu'
 <Layout title="Reed Turgeon">
   <main class="flex-1 flex flex-col items-center justify-center p-8 gap-10">
     <div class="flex flex-col justify-center items-center gap-2">
-
       <div> 
         <span>I have a lot of projects.</span>
         <span class="italic">I need a place to put them.</span>
@@ -16,6 +15,7 @@ import CircularMenu from '../components/CircularMenu'
         href="https://llm.reedturgeon.com" 
         target="_blank" 
         class="text-sm text-[#4a90e2] no-underline hover:underline"
+        data-link="Learn Like Me"
       >
         Learn Like Me
       </a>
@@ -23,18 +23,21 @@ import CircularMenu from '../components/CircularMenu'
       <span>~</span>
       
       <a 
-        href="https://github.com/MrT3313" target="_blank" 
+        href="https://github.com/MrT3313" 
+        target="_blank" 
         class="text-sm text-[#4a90e2] no-underline hover:underline"
-        >
-					GitHub
-				</a>
-				<a 
-          href="https://www.linkedin.com/in/reedturgeon/"
-          target="_blank" 
-          class="text-sm text-[#4a90e2] no-underline hover:underline"
-        >
-          LinkedIn
-				</a>
+        data-link="GitHub"
+      >
+        GitHub
+      </a>
+      <a 
+        href="https://www.linkedin.com/in/reedturgeon/"
+        target="_blank" 
+        class="text-sm text-[#4a90e2] no-underline hover:underline"
+        data-link="LinkedIn"
+      >
+        LinkedIn
+      </a>
     </div>
 
     <div class="bg-[#4a90e2] text-white p-8 rounded-lg text-center shadow-md">
@@ -44,5 +47,23 @@ import CircularMenu from '../components/CircularMenu'
       <p>Please check back soon!</p>
     </div>
   </main>
-  <CircularMenu size={800} client:load />
+  <CircularMenu client:load />
 </Layout>
+
+<script>
+  document.querySelectorAll('a[data-link]').forEach(link => {
+    link.addEventListener('mouseenter', (e) => {
+      const target = e.target as HTMLAnchorElement;
+      const linkName = target.dataset.link || '';
+      window.dispatchEvent(new CustomEvent('linkHover', { 
+        detail: linkName 
+      }));
+    });
+    
+    link.addEventListener('mouseleave', () => {
+      window.dispatchEvent(new CustomEvent('linkHover', { 
+        detail: '' 
+      }));
+    });
+  });
+</script>

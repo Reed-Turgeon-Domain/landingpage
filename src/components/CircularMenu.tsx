@@ -14,6 +14,7 @@ type MenuItem = {
 function CircularMenu() {
   const [mousePos, setMousePos] = useState<Point>({ x: 0, y: 0 })
   const [angle, setAngle] = useState(0)
+  const [activeLink, setActiveLink] = useState('')
   const circleRef = useRef<HTMLDivElement>(null)
 
   const menuItems: MenuItem[] = [
@@ -52,9 +53,22 @@ function CircularMenu() {
     return () => window.removeEventListener('mousemove', updateTarget)
   }, [])
 
-  const getItemVisibility = (itemAngle: number) => {
+  useEffect(() => {
+    const handleHover = (e: CustomEvent) => {
+      setActiveLink(e.detail);
+    };
+
+    window.addEventListener('linkHover', handleHover as EventListener);
+    return () => window.removeEventListener('linkHover', handleHover as EventListener);
+  }, []);
+
+  const getItemVisibility = (itemAngle: number, label: string) => {
+    if (activeLink && activeLink === label) {
+      return 1;
+    }
+    
     const angleDiff = Math.abs(normalizeAngle(angle - itemAngle))
-    const threshold = Math.PI / 4 // 45 degrees threshold
+    const threshold = Math.PI / 4
     const opacity = Math.max(0, 1 - (angleDiff / threshold))
     return opacity
   }
@@ -65,14 +79,14 @@ function CircularMenu() {
     return angle
   }
 
-  const getItemPosition = (itemAngle: number) => {
+  const getItemPosition = (itemAngle: number, label: string) => {
     if (!circleRef.current) return { left: '50%', top: '50%' }
 
     const rect = circleRef.current.getBoundingClientRect()
     const radius = rect.width / 2 - 20
     const x = radius * Math.cos(itemAngle)
     const y = radius * Math.sin(itemAngle)
-    const opacity = getItemVisibility(itemAngle)
+    const opacity = getItemVisibility(itemAngle, label)
 
     return {
       transform: `translate(${x}px, ${y}px) translate(-50%, -50%)`,
@@ -102,7 +116,7 @@ function CircularMenu() {
   }
 
   const getItemStyle = (item: MenuItem) => {
-    const baseStyle = getItemPosition(item.angle)
+    const baseStyle = getItemPosition(item.angle, item.label)
     if (item.label === "Learn Like Me") {
       return {
         ...baseStyle,
