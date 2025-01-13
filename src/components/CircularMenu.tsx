@@ -5,10 +5,22 @@ type Point = {
   y: number
 }
 
+type MenuItem = {
+  label: string
+  angle: number
+}
+
 function CircularMenu() {
   const [mousePos, setMousePos] = useState<Point>({ x: 0, y: 0 })
   const [angle, setAngle] = useState(0)
   const circleRef = useRef<HTMLDivElement>(null)
+
+  const menuItems: MenuItem[] = [
+    { label: "Item 1", angle: 0 },
+    { label: "Item 2", angle: Math.PI / 2 },
+    { label: "Item 3", angle: Math.PI },
+    { label: "Item 4", angle: 3 * Math.PI / 2 },
+  ]
 
   const constrainToViewport = (x: number, y: number): Point => {
     const ballSize = 16
@@ -40,6 +52,35 @@ function CircularMenu() {
     return () => window.removeEventListener('mousemove', updateTarget)
   }, [])
 
+  const getItemVisibility = (itemAngle: number) => {
+    const angleDiff = Math.abs(normalizeAngle(angle - itemAngle))
+    const threshold = Math.PI / 4 // 45 degrees threshold
+    const opacity = Math.max(0, 1 - (angleDiff / threshold))
+    return opacity
+  }
+
+  const normalizeAngle = (angle: number): number => {
+    while (angle < -Math.PI) angle += 2 * Math.PI
+    while (angle > Math.PI) angle -= 2 * Math.PI
+    return angle
+  }
+
+  const getItemPosition = (itemAngle: number) => {
+    if (!circleRef.current) return { left: '50%', top: '50%' }
+
+    const rect = circleRef.current.getBoundingClientRect()
+    const radius = rect.width / 2 - 20
+    const x = radius * Math.cos(itemAngle)
+    const y = radius * Math.sin(itemAngle)
+    const opacity = getItemVisibility(itemAngle)
+
+    return {
+      transform: `translate(${x}px, ${y}px) translate(-50%, -50%)`,
+      opacity,
+      transition: 'opacity 0.3s ease-out',
+    }
+  }
+
   const getBallPosition = () => {
     if (!circleRef.current) return { left: '50%', top: '50%' }
 
@@ -66,6 +107,15 @@ function CircularMenu() {
         ref={circleRef}
         className="relative w-[600px] h-[600px] border-2 border-black/30 border-dashed rounded-full"
       >
+        {menuItems.map((item, index) => (
+          <div
+            key={index}
+            className="absolute left-1/2 top-1/2 px-4 py-2 bg-white rounded-lg shadow-md pointer-events-auto"
+            style={getItemPosition(item.angle)}
+          >
+            {item.label}
+          </div>
+        ))}
         <div 
           className="fixed w-4 h-4 bg-orange-500/80 rounded-full"
           style={getBallPosition()}
