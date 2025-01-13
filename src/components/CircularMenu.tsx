@@ -10,6 +10,16 @@ function CircularMenu() {
   const [angle, setAngle] = useState(0)
   const circleRef = useRef<HTMLDivElement>(null)
 
+  const constrainToViewport = (x: number, y: number): Point => {
+    const ballSize = 16 // w-4 = 16px
+    const padding = 4 // Small padding from viewport edge
+    
+    return {
+      x: Math.min(Math.max(x, ballSize/2 + padding), window.innerWidth - ballSize/2 - padding),
+      y: Math.min(Math.max(y, ballSize/2 + padding), window.innerHeight - ballSize/2 - padding)
+    }
+  }
+
   useEffect(() => {
     const updateTarget = (e: MouseEvent) => {
       if (!circleRef.current) return
@@ -30,6 +40,28 @@ function CircularMenu() {
     return () => window.removeEventListener('mousemove', updateTarget)
   }, [])
 
+  const getBallPosition = () => {
+    if (!circleRef.current) return { left: '50%', top: '50%' }
+
+    const rect = circleRef.current.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    const radius = rect.width / 2
+
+    // Calculate position on circle
+    const rawX = centerX + Math.cos(angle) * radius
+    const rawY = centerY + Math.sin(angle) * radius
+
+    // Constrain to viewport
+    const { x, y } = constrainToViewport(rawX, rawY)
+
+    return {
+      left: `${x}px`,
+      top: `${y}px`,
+      transform: 'translate(-50%, -50%)'
+    }
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900">
       <div 
@@ -37,12 +69,8 @@ function CircularMenu() {
         className="relative w-[600px] h-[600px] border-2 border-white rounded-full"
       >
         <div 
-          className="absolute w-4 h-4 bg-orange-500 rounded-full"
-          style={{
-            left: `${50 + Math.cos(angle) * 50}%`,
-            top: `${50 + Math.sin(angle) * 50}%`,
-            transform: 'translate(-50%, -50%)'
-          }}
+          className="fixed w-4 h-4 bg-orange-500 rounded-full"
+          style={getBallPosition()}
         />
       </div>
 
