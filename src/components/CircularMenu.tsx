@@ -18,9 +18,8 @@ function CircularMenu() {
 
   const menuItems: MenuItem[] = [
     { label: "Learn Like Me", angle: -Math.PI / 4, href: "https://llm.reedturgeon.com" },
-    { label: "Item 2", angle: Math.PI / 4 },
-    { label: "Item 3", angle: 3 * Math.PI / 4 },
-    { label: "Item 4", angle: 5 * Math.PI / 4 },
+    { label: "LinkedIn", angle: Math.PI / 4, href: "https://www.linkedin.com/in/reedturgeon" },
+    { label: "GitHub", angle: 3 * Math.PI / 4, href: "https://github.com/reedturgeon" },
   ]
 
   const constrainToViewport = (x: number, y: number): Point => {
@@ -108,6 +107,20 @@ function CircularMenu() {
       return {
         ...baseStyle,
         backgroundColor: '#6464F0',
+        color: 'white',
+      }
+    }
+    if (item.label === "LinkedIn") {
+      return {
+        ...baseStyle,
+        backgroundColor: '#0077b5',
+        color: 'white',
+      }
+    }
+    if (item.label === "GitHub") {
+      return {
+        ...baseStyle,
+        backgroundColor: '#171515',
         color: 'white',
       }
     }
