@@ -18,31 +18,15 @@ import '../styles/global.css';
 		<title>{title}</title>
 	</head>
 	
-	<body class="min-h-screen flex flex-col m-0 p-0 font-sans">
-		<header class="bg-gray-100 text-[#4a90e2] p-4">
-			<div class="max-w-7xl mx-auto flex flex-col justify-start">
-				<h1 class="text-xl m-0">Reed Turgeon</h1>
-				<a 
-					href="https://llm.reedturgeon.com" 
-					target="_blank" 
-					class="text-sm text-[#4a90e2] no-underline hover:underline"
-				>
-					Learn Like Me
-				</a>
-			</div>
-		</header>
+	<body class="relative min-h-screen flex flex-col items-center justify-center m-0 p-0 font-sans">
 		
 		<slot />
 
-		<footer class="mt-auto p-4 bg-gray-100">
-			<div class="max-w-7xl mx-auto flex justify-center gap-8">
-				<a href="https://github.com/MrT3313" target="_blank" class="text-[#4a90e2] no-underline hover:underline">
-					GitHub
-				</a>
-				<a href="https://www.linkedin.com/in/reedturgeon/" target="_blank" class="text-[#4a90e2] no-underline hover:underline">
-					LinkedIn
-				</a>
-			</div>
-		</footer>
+		<div
+			class="flex justify-center items-center fixed top-4 left-4 bg-[#4a90e2] text-white rounded-lg text-center shadow-md p-2"
+		>
+			<h2 class="text-4xl">🚧 Under Construction</h2>
+		</div>
+		
 	</body>
 </html>
