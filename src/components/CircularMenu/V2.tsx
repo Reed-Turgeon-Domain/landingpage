@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import cx from 'classnames'
 
+import { MathUtils } from '../../utils'
 type Point = {
     x: number
     y: number
@@ -16,6 +17,15 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
     // STATE
     const [circleCenter, setCircleCenter] = useState<Point>({ x: 0, y: 0 })
     const [viewportCenter, setViewportCenter] = useState<Point>({ x: 0, y: 0 })
+    const testVectorLength = 200
+    const [angleDegrees, setAngleDegrees] = useState(0)
+    const angleRadians = MathUtils.convertDegreesToRadians(angleDegrees)
+
+    // Calculate vector end point
+    const vectorEndPoint = {
+        x: circleCenter.x + Math.cos(angleRadians) * testVectorLength,
+        y: circleCenter.y + Math.sin(angleRadians) * testVectorLength
+    }
 
     // MODELS
 
@@ -44,7 +54,6 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
     }, [])
 
     return (
-
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
             {debug && (
                 <div>
@@ -54,6 +63,13 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
                         </div>
                         <div>
                             {`Viewport Center: ${viewportCenter.x}, ${viewportCenter.y}`}
+                        </div>
+
+                        <br />
+
+                        <div className="flex flex-col">
+                            <span>{`Angle Radians: ${angleRadians}`}</span>
+                            <span>{`Angle: ${angleDegrees}°`}</span>
                         </div>
                     </div>
                     
@@ -71,6 +87,18 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
                             left: viewportCenter.x,
                             top: viewportCenter.y,
                             transform: 'translate(-50%, -50%)'
+                        }}
+                    />
+                    <div
+                        className="fixed bg-green-500"
+                        style={{
+                            width: '200px',
+                            height: '4px',
+                            position: 'absolute',
+                            left: circleCenter.x,
+                            top: circleCenter.y,
+                            transformOrigin: '0 50%',
+                            transform: `rotate(${angleRadians}rad) translateY(-50%)`
                         }}
                     />
                 </div>
