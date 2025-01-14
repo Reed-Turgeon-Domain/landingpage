@@ -1,57 +1,22 @@
 import { useState, useEffect, useRef } from 'react'
-import { FaGithub } from "react-icons/fa"
-import { FaLinkedin } from "react-icons/fa";
-
+import type { MenuItem } from '../constants/menuItems'
 
 type Point = {
   x: number
   y: number
 }
 
-type MenuItem = {
-  type: 'Project' | 'Social'
-  isLive: boolean
-  label: string
-  angle: number
-  href?: string
-  icon?: React.ReactNode
+type CircularMenuProps = {
+  items: MenuItem[]
 }
 
-function CircularMenu() {
+function CircularMenu({ items }: CircularMenuProps) {
+  // console.log('MENU ITEMS', items)
+
   const [mousePos, setMousePos] = useState<Point>({ x: 0, y: 0 })
   const [angle, setAngle] = useState(0)
   const [activeLink, setActiveLink] = useState('')
   const circleRef = useRef<HTMLDivElement>(null)
-
-  const menuItems: MenuItem[] = [
-    { type: "Project", isLive: true,
-      label: "Learn Like Me", 
-      angle: -Math.PI * 0.8,
-      href: "https://llm.reedturgeon.com" },
-    { type: "Project", isLive: false,
-      label: "🚧 CrowdPI",
-      angle: -Math.PI * 0.6, },
-    { type: "Project", isLive: false,
-      label: "🚧 CheckIt",
-      angle: -Math.PI * 0.4, },
-    { type: "Project", isLive: false,
-      label: "🚧 AsyncDebate",
-      angle: -Math.PI * 0.2, },
-    { type: "Social", isLive: true,
-      label: "LinkedIn", 
-      angle: Math.PI * 0.33,
-      href: "https://www.linkedin.com/in/reedturgeon", 
-      icon: <div style={{ marginTop: '1px' }}>
-        <FaLinkedin size={25} />
-      </div>},
-    { type: "Social", isLive: true,
-      label: "GitHub", 
-      angle: Math.PI * 0.67,
-      href: "https://github.com/MrT3313", 
-      icon: <div style={{ marginTop: '1px' }}>
-        <FaGithub size={25}/>
-      </div> },
-  ]
 
   const constrainToViewport = (x: number, y: number): Point => {
     const ballSize = 16
@@ -178,7 +143,7 @@ function CircularMenu() {
     if (!activeLink) return true
     
     // Check if any menu item is visible when there's an active link
-    return !menuItems.some(item => 
+    return !items.some(item => 
       item.label === activeLink && getItemVisibility(item.angle, item.label) > 0
     )
   }
@@ -191,7 +156,7 @@ function CircularMenu() {
         ref={circleRef}
         className="relative w-[400px] h-[400px] border-2 border-black border-dashed rounded-full"
       >
-        {menuItems.map((item, index) => (
+        {items.map((item, index) => (
           <div
             key={index}
             className="absolute left-1/2 top-1/2 px-2 py-1 rounded-lg shadow-md pointer-events-auto"
@@ -205,7 +170,16 @@ function CircularMenu() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {item?.icon ? item.icon : item.label}
+                {item.IconComponent ? (
+                  <>
+                    <div style={{ marginTop: '1px' }}>
+                      <item.IconComponent size={25} />
+                    </div>
+                    <span>{item.label}</span>
+                  </>
+                ) : (
+                  item.label
+                )}
               </a>
             ) : (
               item.label

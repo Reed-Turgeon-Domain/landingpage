@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import CircularMenu from '../components/CircularMenu'
+import { menuItems } from '../constants/menuItems'
 ---
 
 <Layout title="Reed Turgeon">
@@ -40,7 +41,7 @@ import CircularMenu from '../components/CircularMenu'
       </a>
     </div>
   </main>
-  <CircularMenu client:load />
+  <CircularMenu items={menuItems} client:load />
 </Layout>
 
 <script>
