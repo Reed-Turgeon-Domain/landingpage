@@ -3,16 +3,25 @@ import cx from 'classnames'
 
 import { MathUtils } from '../../utils'
 import { useMousePosition } from '../../hooks/useMousePosition'
+import { menuItems } from '../../constants/menuItems'
+import type { MenuItem } from '../../constants/menuItems'
 
 type Point = {
     x: number
     y: number
 }
 type CircularMenuV2Props = {
+    menuItems: MenuItem[]
     diameter?: number
+    total_segments?: number
     debug?: boolean
 }
-const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) => {
+const CircularMenuV2 = ({ 
+    menuItems,
+    diameter = 400, 
+    total_segments = 20,
+    debug = true }: CircularMenuV2Props) => {
+    console.log(menuItems[0])
     // REFFS
     const circleRef = useRef<HTMLDivElement>(null)
 
@@ -50,6 +59,35 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
         return () => window.removeEventListener('resize', updateCenters)
     }, [])
 
+    const generateSegmentPath = (
+        index: number
+    ): string => {
+        const radius = diameter / 2
+        const anglePerSegment = (2 * Math.PI) / total_segments
+        const startAngle = index * anglePerSegment
+        const endAngle = (index + 1) * anglePerSegment
+
+        const startX = radius + radius * Math.cos(startAngle)
+        const startY = radius + radius * Math.sin(startAngle)
+        const endX = radius + radius * Math.cos(endAngle)
+        const endY = radius + radius * Math.sin(endAngle)
+
+        const largeArcFlag = 0 // Use 0 for segments less than 180 degrees
+        
+        return `M ${radius},${radius} L ${startX},${startY} A ${radius},${radius} 0 ${largeArcFlag} 1 ${endX},${endY} Z`
+    }
+
+    const getSegmentCenter = (index: number): Point => {
+        const radius = diameter / 2
+        const anglePerSegment = (2 * Math.PI) / total_segments
+        const angle = (index + 0.5) * anglePerSegment
+        
+        return {
+            x: radius + (radius * 0.6) * Math.cos(angle),
+            y: radius + (radius * 0.6) * Math.sin(angle)
+        }
+    }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
             {debug && (
@@ -70,6 +108,24 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
                         <div>
                             {`Mouse Position: ${isMouseInViewport ? `${mousePosition.x}, ${mousePosition.y}` : 'Outside viewport'}`}
                         </div>
+
+                        {isMouseInViewport && (
+                            <>
+                                <br />
+                                <div>
+                                    {`Vector Start: ${circleCenter.x}, ${circleCenter.y}`}
+                                </div>
+                                <div>
+                                    {`Vector End: ${mousePosition.x}, ${mousePosition.y}`}
+                                </div>
+                                <div>
+                                    {`Vector Length: ${Math.sqrt(
+                                        Math.pow(mousePosition.x - circleCenter.x, 2) + 
+                                        Math.pow(mousePosition.y - circleCenter.y, 2)
+                                    ).toFixed(2)}px`}
+                                </div>
+                            </>
+                        )}
                     </div>
                     
                     <div 
@@ -121,13 +177,34 @@ const CircularMenuV2 = ({ diameter = 400, debug = true }: CircularMenuV2Props) =
                 </div>
             )}
 
-            <div 
+            <svg 
                 ref={circleRef}
-                className="relative border-2 border-black border-dashed rounded-full"
-                style={{ width: diameter, height: diameter }}
+                width={diameter}
+                height={diameter}
+                className="relative"
             >
-                
-            </div>
+                {Array.from({ length: total_segments }, (_, index) => (
+                    <g key={index}>
+                        <path
+                            d={generateSegmentPath(index)}
+                            className="stroke-black fill-transparent"
+                            strokeWidth="2"
+                            strokeDasharray="4 4"
+                        />
+                        {debug && (
+                            <text
+                                x={getSegmentCenter(index).x}
+                                y={getSegmentCenter(index).y}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                className="text-sm fill-black pointer-events-none"
+                            >
+                                {index}
+                            </text>
+                        )}
+                    </g>
+                ))}
+            </svg>
         </div>
     )
 }
