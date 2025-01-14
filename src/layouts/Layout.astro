@@ -1,4 +1,6 @@
 ---
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+
 interface Props {
 	title: string;
 }
@@ -10,6 +12,7 @@ import '../styles/global.css';
 <!doctype html>
 <html lang="en">
 	<head>
+		<GoogleAnalytics />
 		<meta charset="UTF-8" />
 		<meta name="description" content="Reed Turgeon's Personal Website" />
 		<meta name="viewport" content="width=device-width" />

@@ -29,7 +29,7 @@ function CircularMenu() {
       angle: -Math.PI * 0.8,
       href: "https://llm.reedturgeon.com" },
     { type: "Project", isLive: false,
-      label: "🚧 CrowdPi",
+      label: "🚧 CrowdPI",
       angle: -Math.PI * 0.6, },
     { type: "Project", isLive: false,
       label: "🚧 CheckIt",

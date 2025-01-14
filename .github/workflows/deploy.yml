@@ -21,6 +21,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: 
+      name: github-pages
+    
     steps:
       # Step 1: Get the code from the repository
       - name: Checkout
@@ -40,6 +43,8 @@ jobs:
         run: npm install
 
       - name: Build
+        env:
+          PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.PUBLIC_GOOGLE_ANALYTICS_ID }}
         run: npm run build
       
       # Step 4: Package the built files for deployment
