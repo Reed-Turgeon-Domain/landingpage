@@ -4,18 +4,26 @@ import cx from 'classnames'
 import { MathUtils } from '../../utils'
 import { useMousePosition } from '../../hooks/useMousePosition'
 import { menuItems } from '../../constants/menuItems'
-import type { MenuItem } from '../../constants/menuItems'
+import MenuItemCard from './MenuItemCard'
 
 type Point = {
     x: number
     y: number
 }
 type CircularMenuV2Props = {
-    menuItems: MenuItem[]
+    menuItems: MenuItemType[]
     diameter?: number
     total_segments?: number
     debug?: boolean
 }
+
+type MenuItemType = {
+    label: string
+    segments: number[]
+    href?: string
+    IconComponent?: React.ComponentType<{ size: number }>
+}
+
 const CircularMenuV2 = ({ 
     menuItems,
     diameter = 400, 
@@ -23,7 +31,7 @@ const CircularMenuV2 = ({
     debug = true }: CircularMenuV2Props) => {
     console.log(menuItems[0])
     // REFFS
-    const circleRef = useRef<HTMLDivElement>(null)
+    const circleRef = useRef<SVGSVGElement>(null)
 
     // STATE
     const [circleCenter, setCircleCenter] = useState<Point>({ x: 0, y: 0 })
@@ -88,11 +96,37 @@ const CircularMenuV2 = ({
         }
     }
 
+    const getSegmentEdgePosition = (index: number): Point => {
+        const radius = diameter / 2
+        const anglePerSegment = (2 * Math.PI) / total_segments
+        const angle = (index + 0.5) * anglePerSegment
+        
+        return {
+            x: radius + radius * Math.cos(angle),
+            y: radius + radius * Math.sin(angle)
+        }
+    }
+
+    const getMultiSegmentEdgePosition = (segments: number[]): Point => {
+        const radius = diameter / 2
+        const anglePerSegment = (2 * Math.PI) / total_segments
+        
+        // Get the middle angle between first and last segment
+        const startAngle = segments[0] * anglePerSegment
+        const endAngle = (segments[segments.length - 1] + 1) * anglePerSegment
+        const middleAngle = startAngle + (endAngle - startAngle) / 2
+        
+        return {
+            x: radius + radius * Math.cos(middleAngle),
+            y: radius + radius * Math.sin(middleAngle)
+        }
+    }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
             {debug && (
                 <div>
-                    <div className="absolute top-0 left-0">
+                    <div className="absolute top-0 right-0">
                         <div> 
                             {`Circle Center: ${circleCenter.x}, ${circleCenter.y}`}
                         </div>
@@ -191,6 +225,31 @@ const CircularMenuV2 = ({
                             strokeWidth="2"
                             strokeDasharray="4 4"
                         />
+                        {menuItems.map((item) => 
+                            item.segments?.includes(index) && 
+                            item.segments[0] === index && (
+                                <foreignObject
+                                    key={`item-${item.label}-${index}`}
+                                    x={item.segments.length > 1 
+                                        ? getMultiSegmentEdgePosition(item.segments).x - 75
+                                        : getSegmentEdgePosition(index).x - 75}
+                                    y={item.segments.length > 1
+                                        ? getMultiSegmentEdgePosition(item.segments).y - 25
+                                        : getSegmentEdgePosition(index).y - 25}
+                                    width="150"
+                                    height="50"
+                                    style={{ overflow: 'visible' }}
+                                >
+                                    <div className="flex items-center justify-center w-full h-full">
+                                        <MenuItemCard
+                                            label={item.label}
+                                            IconComponent={item.IconComponent}
+                                            position={{ x: 75, y: 25 }}
+                                        />
+                                    </div>
+                                </foreignObject>
+                            )
+                        )}
                         {debug && (
                             <text
                                 x={getSegmentCenter(index).x}

@@ -1,6 +1,6 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa"
 
-export type MenuItem = {
+export type MenuItemType = {
   type: 'Project' | 'Social'
   isLive: boolean
   label: string
@@ -9,7 +9,7 @@ export type MenuItem = {
   IconComponent?: typeof FaGithub | typeof FaLinkedin
 }
 
-export const menuItems: MenuItem[] = [
+export const menuItems: MenuItemType[] = [
     { 
       type: "Project",
       isLive: true,
@@ -43,14 +43,14 @@ export const menuItems: MenuItem[] = [
     //   IconComponent: FaLinkedin,
     //   segment_size: 1,
     // },
-    // { 
-    //   type: "Social",
-    //   isLive: true,
-    //   label: "GitHub", 
-    //   href: "https://github.com/MrT3313", 
-    //   IconComponent: FaGithub,
-    //   segment_size: 1,
-    // },
+    { 
+      type: "Social",
+      isLive: true,
+      label: "GitHub", 
+      href: "https://github.com/MrT3313", 
+      IconComponent: FaGithub,
+      segments: [3],
+    },
 ]
 
 
