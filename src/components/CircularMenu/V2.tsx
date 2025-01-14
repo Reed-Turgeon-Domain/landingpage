@@ -122,6 +122,14 @@ const CircularMenuV2 = ({
         }
     }
 
+    const calculateVectorDegree = (start: Point, end: Point): number => {
+        const radians = Math.atan2(end.y - start.y, end.x - start.x)
+        // Convert radians to degrees and normalize to 0-360 range
+        let degrees = (radians * 180) / Math.PI
+        degrees = degrees < 0 ? degrees + 360 : degrees
+        return Number(degrees.toFixed(2))
+    }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
             {debug && (
@@ -146,6 +154,9 @@ const CircularMenuV2 = ({
                         {isMouseInViewport && (
                             <>
                                 <br />
+                                <div>
+                                    {`Vector Degree: ${calculateVectorDegree(circleCenter, mousePosition)}°`}
+                                </div>
                                 <div>
                                     {`Vector Start: ${circleCenter.x}, ${circleCenter.y}`}
                                 </div>
