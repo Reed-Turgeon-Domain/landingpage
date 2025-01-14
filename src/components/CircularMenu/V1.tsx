@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import type { MenuItem } from '../constants/menuItems'
+import type { MenuItem } from '../../constants/menuItems'
 
 type Point = {
   x: number
@@ -152,7 +152,7 @@ function CircularMenu({ items }: CircularMenuProps) {
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
       <div 
         ref={circleRef}
-        className="relative w-[400px] h-[400px] border-2 border-black border-dashed rounded-full"
+        className="hidden relative w-[400px] h-[400px] border-2 border-teal-500 border-dashed rounded-full"
       >
         {items.map((item, index) => (
           <div
