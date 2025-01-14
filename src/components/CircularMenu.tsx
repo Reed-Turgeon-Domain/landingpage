@@ -9,7 +9,7 @@ type Point = {
 type CircularMenuProps = {
   items: MenuItem[]
 }
-
+const version = `V1.3-MenuItemsAsProps`
 function CircularMenu({ items }: CircularMenuProps) {
   // console.log('MENU ITEMS', items)
 
@@ -147,8 +147,6 @@ function CircularMenu({ items }: CircularMenuProps) {
       item.label === activeLink && getItemVisibility(item.angle, item.label) > 0
     )
   }
-
-  const version = `V1.2-Icons`
 
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
