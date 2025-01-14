@@ -9,6 +9,8 @@ type Point = {
 }
 
 type MenuItem = {
+  type: 'Project' | 'Social'
+  isLive: boolean
   label: string
   angle: number
   href?: string
@@ -22,17 +24,29 @@ function CircularMenu() {
   const circleRef = useRef<HTMLDivElement>(null)
 
   const menuItems: MenuItem[] = [
-    { label: "Learn Like Me", 
-      angle: -Math.PI / 4, 
+    { type: "Project", isLive: true,
+      label: "Learn Like Me", 
+      angle: -Math.PI * 0.8,
       href: "https://llm.reedturgeon.com" },
-    { label: "LinkedIn", 
-      angle: Math.PI / 4, 
-      href: "https://www.linkedin.com/in/reedturgeon" , 
+    { type: "Project", isLive: false,
+      label: "🚧 CrowdPi",
+      angle: -Math.PI * 0.6, },
+    { type: "Project", isLive: false,
+      label: "🚧 CheckIt",
+      angle: -Math.PI * 0.4, },
+    { type: "Project", isLive: false,
+      label: "🚧 AsyncDebate",
+      angle: -Math.PI * 0.2, },
+    { type: "Social", isLive: true,
+      label: "LinkedIn", 
+      angle: Math.PI * 0.33,
+      href: "https://www.linkedin.com/in/reedturgeon", 
       icon: <div style={{ marginTop: '1px' }}>
         <FaLinkedin size={25} />
       </div>},
-    { label: "GitHub", 
-      angle: 3 * Math.PI / 4, 
+    { type: "Social", isLive: true,
+      label: "GitHub", 
+      angle: Math.PI * 0.67,
       href: "https://github.com/MrT3313", 
       icon: <div style={{ marginTop: '1px' }}>
         <FaGithub size={25}/>
@@ -169,7 +183,7 @@ function CircularMenu() {
     )
   }
 
-  const version = `V1.1-Icons`
+  const version = `V1.2-Icons`
 
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none">

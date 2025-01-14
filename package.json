@@ -1,7 +1,7 @@
 {
   "name": "landingpage",
   "type": "module",
-  "version": "0.1.1-CircleMenu(V1.1-Icons)",
+  "version": "0.1.2-CircleMenu(V1.2-MenuGrouping)",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
