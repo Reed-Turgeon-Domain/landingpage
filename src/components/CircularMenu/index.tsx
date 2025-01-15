@@ -1,0 +1,1 @@
+export { default as CircularMenu } from './V2'
