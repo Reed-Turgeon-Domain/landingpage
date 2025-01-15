@@ -1,4 +1,3 @@
-import { FaGithub, FaLinkedin } from "react-icons/fa"
 import { type MenuItemType } from "../types"
 
 export const menuItems: MenuItemType[] = [
@@ -20,22 +19,16 @@ export const menuItems: MenuItemType[] = [
       type: "Social",
       isLive: true,
       label: "LinkedIn", 
-      href: "https://www.linkedin.com/in/reedturgeon", 
-      icon: {
-        component: FaLinkedin,
-        size: 24
-      },
+      href: "https://www.linkedin.com/in/reedturgeon",
+      iconType: "linkedin",
       segments: [1],
     },
     { 
       type: "Social",
       isLive: true,
       label: "GitHub", 
-      href: "https://github.com/MrT3313", 
-      icon: {
-        component: FaGithub,
-        size: 24
-      },
+      href: "https://github.com/MrT3313",
+      iconType: "github",
       segments: [3],
     },
 ]

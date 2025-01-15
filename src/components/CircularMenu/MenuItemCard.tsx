@@ -1,4 +1,5 @@
-import { type ComponentType, useState, useRef, useEffect } from 'react'
+import React, { type ComponentType, useState, useRef, useEffect } from 'react'
+import { FaGithub, FaLinkedin } from "react-icons/fa"
 import cx from 'classnames'
 
 // TYPES
@@ -80,6 +81,15 @@ const MenuItemCard = ({
         setIsSyntheticHovering(isColliding)
     }, [syntheticPosition, isMouseHovering])
 
+    const renderIcon = (iconType: "github" | "linkedin") => {
+        switch (iconType) {
+            case "github":
+                return <div style={{ marginTop: '1px' }}><FaGithub size={24} /></div>
+            case "linkedin":
+                return <div style={{ marginTop: '1px' }}><FaLinkedin size={24} /></div>
+        }
+    }
+
     return (
         <div 
             ref={containerRef}
@@ -102,9 +112,19 @@ const MenuItemCard = ({
                 )}
                 style={item?.hex ? { backgroundColor: `#${item.hex}` } : undefined}
             >
-                <span className="whitespace-nowrap text-sm">
-                    {item.label}
-                </span>
+                {item.href ? (
+                    <a 
+                        href={item.href}
+                        className="no-underline hover:opacity-80 flex items-center gap-2"
+                        style={{ color: 'inherit' }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {item.iconType ? renderIcon(item.iconType) : item.label}
+                    </a>
+                ) : (
+                    item.label
+                )}
             </div>
             
             {debug && (

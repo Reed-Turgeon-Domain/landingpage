@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react'
+
 export type Point = {
   x: number
   y: number
@@ -9,11 +11,12 @@ export type Vector = {
   length_in_px: number
 } 
 
-export type MenuItemType = {
+export interface MenuItemType {
   type: "Project" | "Social"
   isLive: boolean
   label: string
-  hex?: string
   href?: string
+  hex?: string
+  iconType?: "github" | "linkedin"
   segments: number[]
 }
