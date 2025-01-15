@@ -23,6 +23,7 @@ type CircularMenuV2Props = {
     total_segments?: number
     debug?: boolean
 }
+const version = `V2`
 const CircularMenuV2 = ({ 
     menuItems,
     diameter = 400, 
