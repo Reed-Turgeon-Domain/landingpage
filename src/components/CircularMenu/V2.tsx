@@ -1,49 +1,65 @@
 import { useState, useEffect, useRef } from 'react'
 import cx from 'classnames'
 
+// TYPES
+import { type Point, type Vector, type MenuItemType } from '../../types/index'
+
+// UTILS
 import { MathUtils } from '../../utils'
+
+// HOOKS
 import { useMousePosition } from '../../hooks/useMousePosition'
+import { useSyntheticCursorPosition } from '../../hooks/useSyntheticCursorPosition'
+
+// CONSTANTS
 import { menuItems } from '../../constants/menuItems'
+
+// COMPONENTS
 import MenuItemCard from './MenuItemCard'
 
-type Point = {
-    x: number
-    y: number
-}
 type CircularMenuV2Props = {
     menuItems: MenuItemType[]
     diameter?: number
     total_segments?: number
     debug?: boolean
 }
-
-type MenuItemType = {
-    label: string
-    segments: number[]
-    href?: string
-    IconComponent?: React.ComponentType<{ size: number }>
-}
-
 const CircularMenuV2 = ({ 
     menuItems,
     diameter = 400, 
     total_segments = 20,
-    debug = true }: CircularMenuV2Props) => {
+    debug = true 
+}: CircularMenuV2Props) => {
     console.log(menuItems[0])
-    // REFFS
+    // REFS
     const circleRef = useRef<SVGSVGElement>(null)
 
     // STATE
+    // STATE > center points
     const [circleCenter, setCircleCenter] = useState<Point>({ x: 0, y: 0 })
     const [viewportCenter, setViewportCenter] = useState<Point>({ x: 0, y: 0 })
-    
-    
-    // Use the custom hook instead of local state
+
+    // STATE > mouse
+    const [mouseVectorToCircleCenter, setMouseVectorToCircleCenter] = useState<Vector>({ 
+        start: { x: 0, y: 0 }, 
+        end: { x: 0, y: 0 }, 
+        length_in_px: 0 
+    })
+    const [mouseInMenu, setMouseInMenu] = useState<boolean>(false)
+
+    // HOOKS
+    // HOOKS > custom
     const { mousePosition, isMouseInViewport } = useMousePosition()
+    const syntheticCursorPosition = useSyntheticCursorPosition({
+        mousePosition,
+        circleCenter,
+        radius: diameter / 2,
+        isMouseInViewport
+    })
 
     // MODELS
 
     // USE EFFECTS
+    // USE EFFECTS > points
     useEffect(() => {
         const updateCenters = () => {
             // Update circle center
@@ -67,6 +83,45 @@ const CircularMenuV2 = ({
         return () => window.removeEventListener('resize', updateCenters)
     }, [])
 
+    // Update mouseVectorToCircleCenter when mouse position changes
+    useEffect(() => {
+        if (!isMouseInViewport) {
+            setMouseVectorToCircleCenter({ 
+                start: circleCenter, 
+                end: { x: 0, y: 0 }, 
+                length_in_px: 0 
+            })
+            setMouseInMenu(false)
+            return
+        }
+
+        const length = Math.sqrt(
+            Math.pow(mousePosition.x - circleCenter.x, 2) + 
+            Math.pow(mousePosition.y - circleCenter.y, 2)
+        )
+
+        setMouseVectorToCircleCenter({
+            start: circleCenter,
+            end: mousePosition,
+            length_in_px: length
+        })
+
+        setMouseInMenu(length <= diameter / 2)
+    }, [mousePosition, circleCenter, isMouseInViewport, diameter])
+
+    // METHODS
+    // METHODS > points
+    const getAbsolutePosition = (svgX: number, svgY: number): Point => {
+        if (!circleRef.current) return { x: 0, y: 0 }
+        
+        const svgRect = circleRef.current.getBoundingClientRect()
+        return {
+            x: svgRect.left + svgX,
+            y: svgRect.top + svgY
+        }
+    }
+
+    // METHODS > segments
     const generateSegmentPath = (
         index: number
     ): string => {
@@ -122,6 +177,7 @@ const CircularMenuV2 = ({
         }
     }
 
+    // METHODS > Vectors
     const calculateVectorDegree = (start: Point, end: Point): number => {
         const radians = Math.atan2(end.y - start.y, end.x - start.x)
         // Convert radians to degrees and normalize to 0-360 range
@@ -130,16 +186,21 @@ const CircularMenuV2 = ({
         return Number(degrees.toFixed(2))
     }
 
-    const getAbsolutePosition = (svgX: number, svgY: number): Point => {
-        if (!circleRef.current) return { x: 0, y: 0 }
+    // METHODS > collisions
+    const calculateCircleIntersection = (center: Point, mouse: Point, radius: number): Point => {
+        // Calculate angle between center and mouse
+        const angle = Math.atan2(mouse.y - center.y, mouse.x - center.x)
         
-        const svgRect = circleRef.current.getBoundingClientRect()
+        // Calculate point on circle's circumference
         return {
-            x: svgRect.left + svgX,
-            y: svgRect.top + svgY
+            x: center.x + radius * Math.cos(angle),
+            y: center.y + radius * Math.sin(angle)
         }
     }
 
+    // ====== //
+    // RETURN //
+    // ====== //
     return (
         <div className={cx("border-2 border-teal-500 fixed inset-0 flex items-center justify-center pointer-events-none")}>
             {debug && (
@@ -155,10 +216,13 @@ const CircularMenuV2 = ({
                         <br />
                         
                         <div>
+                            {`Mouse Position: ${isMouseInViewport ? `${mousePosition.x}, ${mousePosition.y}` : 'Outside viewport'}`}
+                        </div>
+                        <div>
                             {`Mouse in viewport: ${isMouseInViewport}`}
                         </div>
                         <div>
-                            {`Mouse Position: ${isMouseInViewport ? `${mousePosition.x}, ${mousePosition.y}` : 'Outside viewport'}`}
+                            {`Mouse in menu: ${mouseInMenu}`}
                         </div>
 
                         {isMouseInViewport && (
@@ -202,33 +266,46 @@ const CircularMenuV2 = ({
                     {isMouseInViewport && (
                         <>
                             <div 
-                                className="fixed w-[5px] h-[5px] bg-purple-500 rounded-full"
+                                className={cx(
+                                    "fixed w-[10px] h-[10px] rounded-full",
+                                    mouseInMenu ? "bg-purple-500" : "bg-red-500"
+                                )}
                                 style={{ 
                                     left: mousePosition.x,
                                     top: mousePosition.y,
                                     transform: 'translate(-50%, -50%)'
                                 }}
                             />
-                            <div 
-                                className="fixed bg-green-500"
-                                style={{
-                                    width: '4px',
-                                    position: 'fixed',
-                                    left: circleCenter.x,
-                                    top: circleCenter.y,
-                                    height: Math.sqrt(
-                                        Math.pow(mousePosition.x - circleCenter.x, 2) + 
-                                        Math.pow(mousePosition.y - circleCenter.y, 2)
-                                    ),
-                                    transform: `rotate(${Math.atan2(
-                                        mousePosition.y - circleCenter.y,
-                                        mousePosition.x - circleCenter.x
-                                    ) - Math.PI/2}rad)`,
-                                    transformOrigin: '0 0'
-                                }}
-                            />
                         </>
                     )}
+                    {!mouseInMenu && isMouseInViewport && (
+                        <div 
+                            className="fixed bg-blue-500"
+                            style={{
+                                width: '2px',
+                                position: 'fixed',
+                                left: syntheticCursorPosition.x,
+                                top: syntheticCursorPosition.y,
+                                height: Math.sqrt(
+                                    Math.pow(mousePosition.x - syntheticCursorPosition.x, 2) + 
+                                    Math.pow(mousePosition.y - syntheticCursorPosition.y, 2)
+                                ),
+                                transform: `rotate(${Math.atan2(
+                                    mousePosition.y - syntheticCursorPosition.y,
+                                    mousePosition.x - syntheticCursorPosition.x
+                                ) - Math.PI/2}rad)`,
+                                transformOrigin: '0 0'
+                            }}
+                        />
+                    )}
+                    <div 
+                        className={cx(!mouseInMenu && 'hidden', "fixed w-[10px] h-[10px] bg-black rounded-full")}
+                        style={{ 
+                            left: syntheticCursorPosition.x,
+                            top: syntheticCursorPosition.y,
+                            transform: 'translate(-50%, -50%)'
+                        }}
+                    />
                 </div>
             )}
 
@@ -274,6 +351,9 @@ const CircularMenuV2 = ({
                                                 position={absolutePosition}
                                                 mousePosition={mousePosition}
                                                 isMouseInViewport={isMouseInViewport}
+                                                mouseInMenu={mouseInMenu}
+                                                syntheticPosition={syntheticCursorPosition}
+                                                debug={debug}
                                             />
                                         </div>
                                     </foreignObject>
