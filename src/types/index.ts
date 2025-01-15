@@ -12,11 +12,11 @@ export type Vector = {
 } 
 
 export interface MenuItemType {
-  type: "Project" | "Social"
+  type: "Project" | "Social" | "Personal"
   isLive: boolean
   label: string
   href?: string
   hex?: string
-  iconType?: "github" | "linkedin"
+  iconType?: "github" | "linkedin" | "email"
   segments: number[]
 }

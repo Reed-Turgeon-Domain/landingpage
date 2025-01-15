@@ -1,3 +1,4 @@
+import { FaGithub, FaLinkedin } from "react-icons/fa"
 import { type MenuItemType } from "../types"
 
 export const menuItems: MenuItemType[] = [
@@ -11,17 +12,23 @@ export const menuItems: MenuItemType[] = [
     },
     { 
       type: "Project",
-      isLive: true,
+      isLive: false,
       label: "🚧 CrowdPI",
       segments: [14,15],
     },
     { 
+      type: "Project",
+      isLive: false,
+      label: "🚧 AsyncDebate",
+      segments: [16,17],
+    },
+    { 
       type: "Social",
       isLive: true,
-      label: "LinkedIn", 
+      label: "LinkedIn",
       href: "https://www.linkedin.com/in/reedturgeon",
       iconType: "linkedin",
-      segments: [1],
+      segments: [2],
     },
     { 
       type: "Social",
@@ -30,6 +37,20 @@ export const menuItems: MenuItemType[] = [
       href: "https://github.com/MrT3313",
       iconType: "github",
       segments: [3],
+    },
+    { 
+      type: "Personal",
+      isLive: false,
+      label: "🚧 Finances",
+      segments: [0],
+    },
+    { 
+      type: "Personal",
+      isLive: true,
+      label: "Reach Out",
+      href: "mailto:turgeon.dev+reedturgeon.com@gmail.com.com",
+      iconType: "email",
+      segments: [8],
     },
 ]
 

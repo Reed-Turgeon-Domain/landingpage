@@ -1,6 +1,9 @@
 import React, { type ComponentType, useState, useRef, useEffect } from 'react'
-import { FaGithub, FaLinkedin } from "react-icons/fa"
 import cx from 'classnames'
+
+// ICONS
+import { FaGithub, FaLinkedin } from "react-icons/fa"
+import { MdAlternateEmail } from "react-icons/md";
 
 // TYPES
 import { type MenuItemType, type Point } from '../../types'
@@ -81,12 +84,22 @@ const MenuItemCard = ({
         setIsSyntheticHovering(isColliding)
     }, [syntheticPosition, isMouseHovering])
 
-    const renderIcon = (iconType: "github" | "linkedin") => {
+    
+    const renderIcon = (iconType: "github" | "linkedin" | "email") => {
+        // TODO: BUG (icon rendering) - 👀 this is driving me up a wall
+        //                  why cant I just have an Icon: <FaGithub size={24} /> in the const menuItems array 
+        //                  and render <Icon /> or <item.Icon/>?
+        const iconProps = { 
+            size: 24,
+        }
+        
         switch (iconType) {
             case "github":
-                return <div style={{ marginTop: '1px' }}><FaGithub size={24} /></div>
+                return <FaGithub {...iconProps} />
             case "linkedin":
-                return <div style={{ marginTop: '1px' }}><FaLinkedin size={24} /></div>
+                return <FaLinkedin {...iconProps} />
+            case "email":
+                return <MdAlternateEmail {...iconProps} />
         }
     }
 
@@ -99,54 +112,42 @@ const MenuItemCard = ({
             style={{ opacity: isMouseHovering ? 1 : opacity }}
         >
             <div 
+                style={{ 
+                    backgroundColor: item?.hex ? `#${item.hex}` : 'white',
+                    color: item?.hex && 'white',
+                    opacity: isMouseHovering ? 1 : opacity 
+                }}
                 className={cx(
                     "flex flex-col items-center justify-center",
                     "gap-2 px-2 py-1", 
                     "rounded-md shadow-md",
                     "transition-all duration-150",
+                    "pointer-events-auto",
                     {
-                        "bg-white": !isMouseHovering && !isSyntheticHovering,
-                        "bg-green-500": !isMouseHovering && isSyntheticHovering,
-                        "bg-blue-500": isMouseHovering,
+                        "cursor-pointer": item.href,
                     }
                 )}
-                style={item?.hex ? { backgroundColor: `#${item.hex}` } : undefined}
             >
                 {item.href ? (
                     <a 
                         href={item.href}
-                        className="no-underline hover:opacity-80 flex items-center gap-2"
-                        style={{ color: 'inherit' }}
+                        className={cx(
+                            "no-underline hover:opacity-80",
+                            "flex items-center gap-2",
+                            "pointer-events-auto",
+                            "cursor-pointer"
+                        )}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
                         {item.iconType ? renderIcon(item.iconType) : item.label}
                     </a>
                 ) : (
-                    item.label
+                    <span>
+                        {item.label}
+                    </span>
                 )}
             </div>
-            
-            {debug && (
-                <div className="absolute -bottom-32 w-[300px] left-0 text-xs text-gray-500">
-                    <div>pos: {position.x.toFixed(0)}, {position.y.toFixed(0)}</div>
-                    {isMouseInViewport && (
-                        <>
-                            <div>mouse: {mousePosition.x.toFixed(0)}, {mousePosition.y.toFixed(0)}</div>
-                            <div>dist to mouse: {distanceToMouse.toFixed(0)}px</div>
-                            <div>mouse hover: {isMouseHovering ? "true" : "false"}</div>
-                            {syntheticPosition && (
-                                <>  
-                                    <div>synthetic: {syntheticPosition?.x.toFixed(0)}, {syntheticPosition?.y.toFixed(0)}</div>
-                                    <div>dist to synthetic: {distanceToSynthetic.toFixed(0)}px</div>
-                                    <div>synthetic hover: {isSyntheticHovering ? "true" : "false"}</div>
-                                </>
-                            )}
-                        </>
-                    )}
-                    <div>hover: {isMouseHovering ? "mouse" : isSyntheticHovering ? "synthetic" : "none"}</div>
-                </div>
-            )}
         </div>
     )
 }

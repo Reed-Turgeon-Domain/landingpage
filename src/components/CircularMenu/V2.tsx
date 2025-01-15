@@ -27,7 +27,7 @@ const CircularMenuV2 = ({
     menuItems,
     diameter = 400, 
     total_segments = 20,
-    debug = true 
+    debug = false 
 }: CircularMenuV2Props) => {
     // REFS
     const circleRef = useRef<SVGSVGElement>(null)
@@ -297,14 +297,14 @@ const CircularMenuV2 = ({
                             }}
                         />
                     )}
-                    <div 
+                    {/* <div 
                         className={cx(!mouseInMenu && 'hidden', "fixed w-[10px] h-[10px] bg-black rounded-full")}
                         style={{ 
                             left: syntheticCursorPosition.x,
                             top: syntheticCursorPosition.y,
                             transform: 'translate(-50%, -50%)'
                         }}
-                    />
+                    /> */}
                 </div>
             )}
 
@@ -312,17 +312,29 @@ const CircularMenuV2 = ({
                 ref={circleRef}
                 width={diameter}
                 height={diameter}
-                className="relative border-red-500 border-2"
+                className="relative"
                 style={{ overflow: 'visible' }}
             >
+                <circle
+                    cx={diameter / 2}
+                    cy={diameter / 2}
+                    r={diameter / 2}
+                    className="stroke-black fill-transparent"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                />
+
                 {Array.from({ length: total_segments }, (_, index) => (
                     <g key={index}>
-                        <path
-                            d={generateSegmentPath(index)}
-                            className="stroke-black fill-transparent"
-                            strokeWidth="2"
-                            strokeDasharray="4 4"
-                        />
+                        {debug && (
+                            <path
+                                d={`M ${diameter/2},${diameter/2} L ${getSegmentEdgePosition(index).x},${getSegmentEdgePosition(index).y}`}
+                                className="stroke-black fill-transparent"
+                                strokeWidth="2"
+                                strokeDasharray="4 4"
+                            />
+                        )}
+                        
                         {menuItems.map((item) => {
                             const svgX = item.segments.length > 1 
                                 ? getMultiSegmentEdgePosition(item.segments).x - 75
