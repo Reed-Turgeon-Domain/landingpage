@@ -20,7 +20,7 @@ type MenuItemCardProps = {
     item: MenuItemType
     position: Point
     mousePosition: Point
-    isMouseInViewport: boolean
+    mouseInViewport: boolean
     mouseInMenu: boolean
     syntheticPosition?: Point
     debug?: boolean
@@ -29,10 +29,10 @@ const MenuItemCard = ({
     item,
     position,
     mousePosition,
-    isMouseInViewport,
+    mouseInViewport,
     mouseInMenu,
     syntheticPosition,
-    debug = true,
+    debug = false,
 }: MenuItemCardProps) => {
     // REFS
     const containerRef = useRef<HTMLDivElement>(null)
@@ -40,10 +40,10 @@ const MenuItemCard = ({
     // STATE
     // STATE > mouse
     const [isMouseHovering, setIsMouseHovering] = useState(false)
-    const distanceToMouse = isMouseInViewport ? calculateDistance(position, mousePosition) : Infinity
+    const distanceToMouse = mouseInViewport ? calculateDistance(position, mousePosition) : Infinity
     // STATE > synthetic
     const [isSyntheticHovering, setIsSyntheticHovering] = useState(false)
-    const distanceToSynthetic = isMouseInViewport && syntheticPosition 
+    const distanceToSynthetic = mouseInViewport && syntheticPosition 
         ? calculateDistance(position, syntheticPosition) 
         : Infinity
     
@@ -56,7 +56,7 @@ const MenuItemCard = ({
 
     // USE EFFECTS
     useEffect(() => {
-        if (!containerRef.current || !isMouseInViewport) return
+        if (!containerRef.current || !mouseInViewport) return
         
         const rect = containerRef.current.getBoundingClientRect()
         const isHovering = 
@@ -66,7 +66,7 @@ const MenuItemCard = ({
             mousePosition.y <= rect.bottom
         
         setIsMouseHovering(isHovering)
-    }, [mousePosition, isMouseInViewport])
+    }, [mousePosition, mouseInViewport])
     
     useEffect(() => {
         if (!syntheticPosition || !containerRef.current || isMouseHovering) {

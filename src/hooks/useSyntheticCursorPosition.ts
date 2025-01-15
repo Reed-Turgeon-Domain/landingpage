@@ -5,19 +5,19 @@ type UseSyntheticCursorPositionProps = {
   mousePosition: Point
   circleCenter: Point
   radius: number
-  isMouseInViewport: boolean
+  mouseInViewport: boolean
 }
 
 export const useSyntheticCursorPosition = ({
   mousePosition,
   circleCenter,
   radius,
-  isMouseInViewport
+  mouseInViewport
 }: UseSyntheticCursorPositionProps) => {
   const [syntheticPosition, setSyntheticPosition] = useState<Point>({ x: 0, y: 0 })
 
   useEffect(() => {
-    if (!isMouseInViewport) {
+    if (!mouseInViewport) {
       setSyntheticPosition({ x: 0, y: 0 })
       return
     }
@@ -31,7 +31,7 @@ export const useSyntheticCursorPosition = ({
       x: circleCenter.x + radius * Math.cos(angle),
       y: circleCenter.y + radius * Math.sin(angle)
     })
-  }, [mousePosition, circleCenter, radius, isMouseInViewport])
+  }, [mousePosition, circleCenter, radius, mouseInViewport])
 
   return syntheticPosition
 } 

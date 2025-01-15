@@ -47,12 +47,12 @@ const CircularMenuV2 = ({
 
     // HOOKS
     // HOOKS > custom
-    const { mousePosition, isMouseInViewport } = useMousePosition()
+    const { mousePosition, mouseInViewport } = useMousePosition()
     const syntheticCursorPosition = useSyntheticCursorPosition({
         mousePosition,
         circleCenter,
         radius: diameter / 2,
-        isMouseInViewport
+        mouseInViewport
     })
 
     // MODELS
@@ -84,7 +84,7 @@ const CircularMenuV2 = ({
 
     // Update mouseVectorToCircleCenter when mouse position changes
     useEffect(() => {
-        if (!isMouseInViewport) {
+        if (!mouseInViewport) {
             setMouseVectorToCircleCenter({ 
                 start: circleCenter, 
                 end: { x: 0, y: 0 }, 
@@ -106,7 +106,7 @@ const CircularMenuV2 = ({
         })
 
         setMouseInMenu(length <= diameter / 2)
-    }, [mousePosition, circleCenter, isMouseInViewport, diameter])
+    }, [mousePosition, circleCenter, mouseInViewport, diameter])
 
     // METHODS
     // METHODS > points
@@ -215,16 +215,16 @@ const CircularMenuV2 = ({
                         <br />
                         
                         <div>
-                            {`Mouse Position: ${isMouseInViewport ? `${mousePosition.x}, ${mousePosition.y}` : 'Outside viewport'}`}
+                            {`Mouse Position: ${mouseInViewport ? `${mousePosition.x}, ${mousePosition.y}` : 'Outside viewport'}`}
                         </div>
                         <div>
-                            {`Mouse in viewport: ${isMouseInViewport}`}
+                            {`Mouse in viewport: ${mouseInViewport}`}
                         </div>
                         <div>
                             {`Mouse in menu: ${mouseInMenu}`}
                         </div>
 
-                        {isMouseInViewport && (
+                        {mouseInViewport && (
                             <>
                                 <br />
                                 <div>
@@ -262,41 +262,6 @@ const CircularMenuV2 = ({
                             transform: 'translate(-50%, -50%)'
                         }}
                     />
-                    {isMouseInViewport && (
-                        <>
-                            <div 
-                                className={cx(
-                                    "fixed w-[10px] h-[10px] rounded-full",
-                                    mouseInMenu ? "bg-purple-500" : "bg-red-500"
-                                )}
-                                style={{ 
-                                    left: mousePosition.x,
-                                    top: mousePosition.y,
-                                    transform: 'translate(-50%, -50%)'
-                                }}
-                            />
-                        </>
-                    )}
-                    {!mouseInMenu && isMouseInViewport && (
-                        <div 
-                            className="fixed bg-blue-500"
-                            style={{
-                                width: '2px',
-                                position: 'fixed',
-                                left: syntheticCursorPosition.x,
-                                top: syntheticCursorPosition.y,
-                                height: Math.sqrt(
-                                    Math.pow(mousePosition.x - syntheticCursorPosition.x, 2) + 
-                                    Math.pow(mousePosition.y - syntheticCursorPosition.y, 2)
-                                ),
-                                transform: `rotate(${Math.atan2(
-                                    mousePosition.y - syntheticCursorPosition.y,
-                                    mousePosition.x - syntheticCursorPosition.x
-                                ) - Math.PI/2}rad)`,
-                                transformOrigin: '0 0'
-                            }}
-                        />
-                    )}
                     {/* <div 
                         className={cx(!mouseInMenu && 'hidden', "fixed w-[10px] h-[10px] bg-black rounded-full")}
                         style={{ 
@@ -306,6 +271,43 @@ const CircularMenuV2 = ({
                         }}
                     /> */}
                 </div>
+            )}
+
+            {!mouseInMenu && mouseInViewport && (
+                <div 
+                    className="fixed bg-red-500"
+                    style={{
+                        width: '2px',
+                        position: 'fixed',
+                        left: syntheticCursorPosition.x,
+                        top: syntheticCursorPosition.y,
+                        height: Math.sqrt(
+                            Math.pow(mousePosition.x - syntheticCursorPosition.x, 2) + 
+                            Math.pow(mousePosition.y - syntheticCursorPosition.y, 2)
+                        ),
+                        transform: `rotate(${Math.atan2(
+                            mousePosition.y - syntheticCursorPosition.y,
+                            mousePosition.x - syntheticCursorPosition.x
+                        ) - Math.PI/2}rad)`,
+                        transformOrigin: '0 0'
+                    }}
+                />
+            )}
+            {mouseInViewport && (
+                <>
+                    <div 
+                        className={cx(
+                            mouseInMenu && "hidden",
+                            "fixed w-[10px] h-[10px] rounded-full",
+                            mouseInMenu ? "bg-teal-500" : "bg-red-500"
+                        )}
+                        style={{ 
+                            left: mousePosition.x,
+                            top: mousePosition.y,
+                            transform: 'translate(-50%, -50%)'
+                        }}
+                    />
+                </>
             )}
 
             <svg 
@@ -360,7 +362,7 @@ const CircularMenuV2 = ({
                                                 item={item}
                                                 position={absolutePosition}
                                                 mousePosition={mousePosition}
-                                                isMouseInViewport={isMouseInViewport}
+                                                mouseInViewport={mouseInViewport}
                                                 mouseInMenu={mouseInMenu}
                                                 syntheticPosition={syntheticCursorPosition}
                                                 debug={debug}

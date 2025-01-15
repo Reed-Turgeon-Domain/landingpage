@@ -7,7 +7,7 @@ type Point = {
 
 export const useMousePosition = () => {
     const [mousePosition, setMousePosition] = useState<Point>({ x: 0, y: 0 })
-    const [isMouseInViewport, setIsMouseInViewport] = useState(true)
+    const [mouseInViewport, setIsMouseInViewport] = useState(true)
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -33,5 +33,5 @@ export const useMousePosition = () => {
         }
     }, [])
 
-    return { mousePosition, isMouseInViewport }
+    return { mousePosition, mouseInViewport }
 } 
