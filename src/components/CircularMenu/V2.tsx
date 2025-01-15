@@ -130,8 +130,18 @@ const CircularMenuV2 = ({
         return Number(degrees.toFixed(2))
     }
 
+    const getAbsolutePosition = (svgX: number, svgY: number): Point => {
+        if (!circleRef.current) return { x: 0, y: 0 }
+        
+        const svgRect = circleRef.current.getBoundingClientRect()
+        return {
+            x: svgRect.left + svgX,
+            y: svgRect.top + svgY
+        }
+    }
+
     return (
-        <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+        <div className={cx("border-2 border-teal-500 fixed inset-0 flex items-center justify-center pointer-events-none")}>
             {debug && (
                 <div>
                     <div className="absolute top-0 right-0">
@@ -226,7 +236,8 @@ const CircularMenuV2 = ({
                 ref={circleRef}
                 width={diameter}
                 height={diameter}
-                className="relative"
+                className="relative border-red-500 border-2"
+                style={{ overflow: 'visible' }}
             >
                 {Array.from({ length: total_segments }, (_, index) => (
                     <g key={index}>
@@ -236,31 +247,38 @@ const CircularMenuV2 = ({
                             strokeWidth="2"
                             strokeDasharray="4 4"
                         />
-                        {menuItems.map((item) => 
-                            item.segments?.includes(index) && 
-                            item.segments[0] === index && (
-                                <foreignObject
-                                    key={`item-${item.label}-${index}`}
-                                    x={item.segments.length > 1 
-                                        ? getMultiSegmentEdgePosition(item.segments).x - 75
-                                        : getSegmentEdgePosition(index).x - 75}
-                                    y={item.segments.length > 1
-                                        ? getMultiSegmentEdgePosition(item.segments).y - 25
-                                        : getSegmentEdgePosition(index).y - 25}
-                                    width="150"
-                                    height="50"
-                                    style={{ overflow: 'visible' }}
-                                >
-                                    <div className="flex items-center justify-center w-full h-full">
-                                        <MenuItemCard
-                                            label={item.label}
-                                            IconComponent={item.IconComponent}
-                                            position={{ x: 75, y: 25 }}
-                                        />
-                                    </div>
-                                </foreignObject>
-                            )
-                        )}
+                        {menuItems.map((item) => {
+                            const svgX = item.segments.length > 1 
+                                ? getMultiSegmentEdgePosition(item.segments).x - 75
+                                : getSegmentEdgePosition(index).x - 75;
+                            const svgY = item.segments.length > 1
+                                ? getMultiSegmentEdgePosition(item.segments).y - 25
+                                : getSegmentEdgePosition(index).y - 25;
+                                
+                            const absolutePosition = getAbsolutePosition(svgX + 75, svgY + 25)
+
+                            return item.segments?.includes(index) && 
+                                item.segments[0] === index && (
+                                    <foreignObject
+                                        key={`item-${item.label}-${index}`}
+                                        x={svgX}
+                                        y={svgY}
+                                        width="150"
+                                        height="50"
+                                        style={{ overflow: 'visible' }}
+                                    >
+                                        <div className="flex items-center justify-center w-full h-full">
+                                            <MenuItemCard
+                                                label={item.label}
+                                                IconComponent={item.IconComponent}
+                                                position={absolutePosition}
+                                                mousePosition={mousePosition}
+                                                isMouseInViewport={isMouseInViewport}
+                                            />
+                                        </div>
+                                    </foreignObject>
+                                )
+                        })}
                         {debug && (
                             <text
                                 x={getSegmentCenter(index).x}
