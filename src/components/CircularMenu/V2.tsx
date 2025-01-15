@@ -29,7 +29,6 @@ const CircularMenuV2 = ({
     total_segments = 20,
     debug = true 
 }: CircularMenuV2Props) => {
-    console.log(menuItems[0])
     // REFS
     const circleRef = useRef<SVGSVGElement>(null)
 
@@ -202,7 +201,7 @@ const CircularMenuV2 = ({
     // RETURN //
     // ====== //
     return (
-        <div className={cx("border-2 border-teal-500 fixed inset-0 flex items-center justify-center pointer-events-none")}>
+        <div className={cx("fixed inset-0 flex items-center justify-center pointer-events-none")}>
             {debug && (
                 <div>
                     <div className="absolute top-0 right-0">
@@ -346,8 +345,7 @@ const CircularMenuV2 = ({
                                     >
                                         <div className="flex items-center justify-center w-full h-full">
                                             <MenuItemCard
-                                                label={item.label}
-                                                IconComponent={item.IconComponent}
+                                                item={item}
                                                 position={absolutePosition}
                                                 mousePosition={mousePosition}
                                                 isMouseInViewport={isMouseInViewport}

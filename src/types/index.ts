@@ -10,8 +10,10 @@ export type Vector = {
 } 
 
 export type MenuItemType = {
-    label: string
-    segments: number[]
-    href?: string
-    IconComponent?: React.ComponentType<{ size: number }>
+  type: "Project" | "Social"
+  isLive: boolean
+  label: string
+  hex?: string
+  href?: string
+  segments: number[]
 }

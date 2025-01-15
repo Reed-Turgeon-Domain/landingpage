@@ -1,54 +1,41 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa"
-
-export type MenuItemType = {
-  type: 'Project' | 'Social'
-  isLive: boolean
-  label: string
-  href?: string
-  segments?: number[]
-  IconComponent?: typeof FaGithub | typeof FaLinkedin
-}
+import { type MenuItemType } from "../types"
 
 export const menuItems: MenuItemType[] = [
     { 
       type: "Project",
       isLive: true,
       label: "Learn Like Me",
+      hex: "6862F0",
       href: "https://llm.reedturgeon.com",
       segments: [12,13],
     },
-    // { 
-    //   type: "Project",
-    //   isLive: false,
-    //   label: "🚧 CrowdPI",
-    //   segment_size: 2,
-    // },
-    // { 
-    //   type: "Project",
-    //   isLive: false,
-    //   label: "🚧 CheckIt",
-    //   segment_size: 2,
-    // },
-    // { 
-    //   type: "Project",
-    //   isLive: false,
-    //   label: "🚧 AsyncDebate",
-    //   segment_size: 2,
-    // },
-    // { 
-    //   type: "Social",
-    //   isLive: true,
-    //   label: "LinkedIn", 
-    //   href: "https://www.linkedin.com/in/reedturgeon", 
-    //   IconComponent: FaLinkedin,
-    //   segment_size: 1,
-    // },
+    { 
+      type: "Project",
+      isLive: true,
+      label: "🚧 CrowdPI",
+      segments: [14,15],
+    },
+    { 
+      type: "Social",
+      isLive: true,
+      label: "LinkedIn", 
+      href: "https://www.linkedin.com/in/reedturgeon", 
+      icon: {
+        component: FaLinkedin,
+        size: 24
+      },
+      segments: [1],
+    },
     { 
       type: "Social",
       isLive: true,
       label: "GitHub", 
       href: "https://github.com/MrT3313", 
-      IconComponent: FaGithub,
+      icon: {
+        component: FaGithub,
+        size: 24
+      },
       segments: [3],
     },
 ]

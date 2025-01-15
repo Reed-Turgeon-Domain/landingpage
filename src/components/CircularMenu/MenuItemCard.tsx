@@ -1,10 +1,8 @@
 import { type ComponentType, useState, useRef, useEffect } from 'react'
 import cx from 'classnames'
 
-type Point = {
-    x: number
-    y: number
-}
+// TYPES
+import { type MenuItemType, type Point } from '../../types'
 
 // HELPERS
 const calculateDistance = (p1: Point, p2: Point): number => {
@@ -15,8 +13,7 @@ const calculateDistance = (p1: Point, p2: Point): number => {
 }
 
 type MenuItemCardProps = {
-    label: string
-    IconComponent?: ComponentType<{ size: number }>
+    item: MenuItemType
     position: Point
     mousePosition: Point
     isMouseInViewport: boolean
@@ -25,8 +22,7 @@ type MenuItemCardProps = {
     debug?: boolean
 }
 const MenuItemCard = ({ 
-    label, 
-    IconComponent,
+    item,
     position,
     mousePosition,
     isMouseInViewport,
@@ -43,7 +39,9 @@ const MenuItemCard = ({
     const distanceToMouse = isMouseInViewport ? calculateDistance(position, mousePosition) : Infinity
     // STATE > synthetic
     const [isSyntheticHovering, setIsSyntheticHovering] = useState(false)
-    const distanceToSynthetic = isMouseInViewport ? calculateDistance(position, syntheticPosition) : Infinity
+    const distanceToSynthetic = isMouseInViewport && syntheticPosition 
+        ? calculateDistance(position, syntheticPosition) 
+        : Infinity
     
     const EFFECT_DISTANCE = 235
     const opacity = syntheticPosition 
@@ -85,14 +83,14 @@ const MenuItemCard = ({
     return (
         <div 
             ref={containerRef}
-            className="flex relative border-2 border-teal-500"
+            className="flex relative"
             onMouseEnter={() => setIsMouseHovering(true)}
             onMouseLeave={() => setIsMouseHovering(false)}
             style={{ opacity: isMouseHovering ? 1 : opacity }}
         >
             <div 
                 className={cx(
-                    "flex flex-col",
+                    "flex flex-col items-center justify-center",
                     "gap-2 px-2 py-1", 
                     "rounded-md shadow-md",
                     "transition-all duration-150",
@@ -102,9 +100,11 @@ const MenuItemCard = ({
                         "bg-blue-500": isMouseHovering,
                     }
                 )}
+                style={item?.hex ? { backgroundColor: `#${item.hex}` } : undefined}
             >
-                {IconComponent && <IconComponent size={20} />}
-                <span className="whitespace-nowrap">{label}</span>
+                <span className="whitespace-nowrap text-sm">
+                    {item.label}
+                </span>
             </div>
             
             {debug && (
