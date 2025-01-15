@@ -29,6 +29,12 @@ export const menuItems: MenuItemType[] = [
       segments: [17],
     },
     { 
+      type: "Project",
+      isLive: false,
+      label: "🚧 Raspberry Pi",
+      segments: [18],
+    },
+    { 
       type: "Social",
       isLive: true,
       label: "LinkedIn",
