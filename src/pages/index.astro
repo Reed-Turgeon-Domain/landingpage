@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import { CircularMenuV2 } from '../components/CircularMenu/index'
+import { CircularMenu } from '../components/CircularMenu/index'
 import { menuItems } from '../constants/menuItems'
 ---
 
@@ -48,6 +48,6 @@ import { menuItems } from '../constants/menuItems'
     </div>
   </main>
 
-  <CircularMenuV2 menuItems={menuItems} client:load />
+  <CircularMenu menuItems={menuItems} client:load />
 </Layout>
 

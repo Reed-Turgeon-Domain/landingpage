@@ -1,2 +1,1 @@
-export { default as CircularMenuV1 } from './V1'
-export { default as CircularMenuV2 } from './V2'
+export { default as CircularMenu } from './V2'
