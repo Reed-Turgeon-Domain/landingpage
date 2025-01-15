@@ -24,6 +24,7 @@ type MenuItemCardProps = {
     mouseInMenu: boolean
     syntheticPosition?: Point
     debug?: boolean
+    interactionModality: 'touch' | 'mouse'
 }
 const MenuItemCard = ({ 
     item,
@@ -33,6 +34,7 @@ const MenuItemCard = ({
     mouseInMenu,
     syntheticPosition,
     debug = false,
+    interactionModality,
 }: MenuItemCardProps) => {
     // REFS
     const containerRef = useRef<HTMLDivElement>(null)
@@ -109,13 +111,13 @@ const MenuItemCard = ({
             className="flex relative"
             onMouseEnter={() => setIsMouseHovering(true)}
             onMouseLeave={() => setIsMouseHovering(false)}
-            style={{ opacity: isMouseHovering ? 1 : opacity }}
+            style={{ opacity: interactionModality === 'touch' ? 1 : (isMouseHovering ? 1 : opacity) }}
         >
             <div 
                 style={{ 
                     backgroundColor: item?.hex ? `#${item.hex}` : 'white',
                     color: item?.hex && 'white',
-                    opacity: isMouseHovering ? 1 : opacity 
+                    opacity: interactionModality === 'touch' ? 1 : (isMouseHovering ? 1 : opacity)
                 }}
                 className={cx(
                     "flex flex-col items-center justify-center",
