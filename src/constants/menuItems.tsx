@@ -54,7 +54,7 @@ export const menuItems: MenuItemType[] = [
       type: "Personal",
       isLive: true,
       label: "Reach Out",
-      href: "mailto:turgeon.dev+reedturgeon.com@gmail.com.com",
+      href: "mailto:turgeon.dev+reedturgeon.com@gmail.com",
       iconType: "email",
       segments: [8],
     },
