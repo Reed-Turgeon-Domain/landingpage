@@ -1,7 +1,7 @@
 {
   "name": "landingpage",
   "type": "module",
-  "version": "0.2.0-GoogleAnalytics",
+  "version": "0.2.1-CircularMenu(V2-Segmented)",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
