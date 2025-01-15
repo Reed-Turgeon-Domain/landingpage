@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import cx from 'classnames'
 
 // TYPES
@@ -15,6 +15,7 @@ import { menuItems } from '../../constants/menuItems'
 
 // COMPONENTS
 import MenuItemCard from './MenuItemCard'
+import ClickConfetti from '../Animations/ClickConfetti'
 
 type CircularMenuV2Props = {
     menuItems: MenuItemType[]
@@ -44,6 +45,11 @@ const CircularMenuV2 = ({
         length_in_px: 0 
     })
     const [mouseInMenu, setMouseInMenu] = useState<boolean>(false)
+
+    // STATE > confetti
+    const [showConfetti, setShowConfetti] = useState<boolean>(false)
+    const [lastClickTime, setLastClickTime] = useState<number>(0)
+    const [clickPosition, setClickPosition] = useState<Point>({ x: 0, y: 0 })
 
     // HOOKS
     // HOOKS > custom
@@ -198,6 +204,23 @@ const CircularMenuV2 = ({
             y: center.y + radius * Math.sin(angle)
         }
     }
+
+    // METHODS > animations
+    const handleClick = useCallback((e: MouseEvent) => {
+        if (mouseInMenu || !mouseInViewport) return
+        
+        const now = Date.now()
+        if (now - lastClickTime < 1000) return // 3 second debounce
+        
+        setLastClickTime(now)
+        setClickPosition({ x: e.clientX, y: e.clientY })
+        setShowConfetti(true)
+    }, [mouseInMenu, mouseInViewport, lastClickTime])
+
+    useEffect(() => {
+        window.addEventListener('click', handleClick)
+        return () => window.removeEventListener('click', handleClick)
+    }, [handleClick])
 
     // ====== //
     // RETURN //
@@ -385,6 +408,13 @@ const CircularMenuV2 = ({
                     </g>
                 ))}
             </svg>
+
+            {showConfetti && (
+                <ClickConfetti
+                    position={clickPosition}
+                    onAnimationComplete={() => setShowConfetti(false)}
+                />
+            )}
         </div>
     )
 }
