@@ -34,11 +34,25 @@ const MenuItemCard = ({
     syntheticPosition,
     debug = true,
 }: MenuItemCardProps) => {
+    // REFS
     const containerRef = useRef<HTMLDivElement>(null)
+
+    // STATE
+    // STATE > mouse
     const [isMouseHovering, setIsMouseHovering] = useState(false)
+    const distanceToMouse = isMouseInViewport ? calculateDistance(position, mousePosition) : Infinity
+    // STATE > synthetic
     const [isSyntheticHovering, setIsSyntheticHovering] = useState(false)
+    const distanceToSynthetic = isMouseInViewport ? calculateDistance(position, syntheticPosition) : Infinity
     
-    // Add mouse position effect to track real hovering
+    const EFFECT_DISTANCE = 235
+    const opacity = syntheticPosition 
+        ? Math.max(0, Math.min(1, 1 - (distanceToSynthetic / EFFECT_DISTANCE)))
+        : 0
+
+    // METHODS
+
+    // USE EFFECTS
     useEffect(() => {
         if (!containerRef.current || !isMouseInViewport) return
         
@@ -51,7 +65,7 @@ const MenuItemCard = ({
         
         setIsMouseHovering(isHovering)
     }, [mousePosition, isMouseInViewport])
-
+    
     useEffect(() => {
         if (!syntheticPosition || !containerRef.current || isMouseHovering) {
             setIsSyntheticHovering(false)
@@ -68,18 +82,13 @@ const MenuItemCard = ({
         setIsSyntheticHovering(isColliding)
     }, [syntheticPosition, isMouseHovering])
 
-    // STATE
-    const distanceToMouse = isMouseInViewport ? calculateDistance(position, mousePosition) : Infinity
-    const distanceToSynthetic = isMouseInViewport ? calculateDistance(position, syntheticPosition) : Infinity
-    
-    // METHODS
-
     return (
         <div 
             ref={containerRef}
             className="flex relative border-2 border-teal-500"
             onMouseEnter={() => setIsMouseHovering(true)}
             onMouseLeave={() => setIsMouseHovering(false)}
+            style={{ opacity: isMouseHovering ? 1 : opacity }}
         >
             <div 
                 className={cx(
