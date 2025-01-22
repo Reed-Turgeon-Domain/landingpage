@@ -17,7 +17,6 @@ import { menuItems } from '../../constants/menuItems'
 // COMPONENTS
 import MenuItemCard from './MenuItemCard'
 import ClickConfetti from '../Animations/ClickConfetti'
-import InteractionModality from '../InteractionModality'
 
 type CircularMenuV2Props = {
     menuItems: MenuItemType[]
@@ -36,8 +35,6 @@ const CircularMenuV2 = ({
     const circleRef = useRef<SVGSVGElement>(null)
 
     // STATE
-    // STATE > interaction modality
-    const [interactionModality, setInteractionModality] = useState<'touch' | 'mouse'>('mouse')
     // STATE > center points
     const [circleCenter, setCircleCenter] = useState<Point>({ x: 0, y: 0 })
     const [viewportCenter, setViewportCenter] = useState<Point>({ x: 0, y: 0 })
@@ -75,13 +72,6 @@ const CircularMenuV2 = ({
     // MODELS
 
     // USE EFFECTS
-    // USE EFFECTS > interaction modality
-    useEffect(() => {
-        if (isTouchOnly) setInteractionModality('touch')
-        else if (isMouseOnly) setInteractionModality('mouse')
-        else setInteractionModality('mouse')
-    }, [isTouchOnly, isMouseOnly, isTablet])
-
     // USE EFFECTS > points
     useEffect(() => {
         const updateCenters = () => {
@@ -407,7 +397,6 @@ const CircularMenuV2 = ({
                                                 mouseInMenu={mouseInMenu}
                                                 syntheticPosition={syntheticCursorPosition}
                                                 debug={debug}
-                                                interactionModality={interactionModality}
                                             />
                                         </div>
                                     </foreignObject>
@@ -434,8 +423,6 @@ const CircularMenuV2 = ({
                     onAnimationComplete={() => setShowConfetti(false)}
                 />
             )}
-
-            <InteractionModality mode={interactionModality} />
         </div>
     )
 }

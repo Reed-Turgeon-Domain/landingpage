@@ -1,14 +1,31 @@
 import { type ReactNode } from 'react'
 import cx from 'classnames'
+import { useState, useEffect } from 'react'
+import { useDeviceDetection } from '../hooks/useDeviceDetection'
 
-type InteractionModalityProps = {
-  mode: 'touch' | 'mouse'
-}
+const InteractionModality = () => {
+  const [interactionModality, setInteractionModality] = useState<'touch' | 'mouse'>('mouse')
+  const { isTouchOnly, isMouseOnly } = useDeviceDetection()
 
-const InteractionModality = ({ mode }: InteractionModalityProps) => {
+  useEffect(() => {
+    if (isTouchOnly) setInteractionModality('touch')
+    else if (isMouseOnly) setInteractionModality('mouse')
+    else setInteractionModality('mouse')
+
+    // Set data attribute and trigger viewport update
+    document.body.setAttribute('data-interaction-modality', interactionModality)
+    window.dispatchEvent(new Event('resize'))
+  }, [isTouchOnly, isMouseOnly, interactionModality])
+
   return (
-    <div className="fixed bottom-2 left-2 px-3 py-1.5 bg-black/80 text-white rounded-lg text-xs">
-      {mode === 'touch' ? '👆 Touch : For best experience, use a 🖱️ Mouse' : '🖱️ Mouse'}
+    <div>
+      <h3 className="font-bold mb-2">Interaction</h3>
+      <div className="px-2 py-1 rounded bg-black/40 whitespace-nowrap">
+        {interactionModality === 'touch' 
+          ? '👆 Touch' 
+          : '🖱️ Mouse'
+        }
+      </div>
     </div>
   )
 }
