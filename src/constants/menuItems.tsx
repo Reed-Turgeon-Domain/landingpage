@@ -5,7 +5,7 @@ export const menuItems: MenuItemType[] = [
     { 
       type: "Project",
       isLive: true,
-      label: "Learn Like Me",
+      label: "🧠 Learn Like Me",
       hex: "6862F0",
       href: "https://llm.reedturgeon.com",
       segments: [12],
@@ -13,27 +13,33 @@ export const menuItems: MenuItemType[] = [
     { 
       type: "Project",
       isLive: false,
-      label: "🚧 CrowdPI",
+      label: "🚧🛒 CrowdPI",
       segments: [13,14],
     },
     { 
-      type: "Project",
+      type: "Personal",
       isLive: false,
-      label: "🚧 AsyncDebate",
+      label: "🚧💰 FOLLYo",
       segments: [15,16],
     },
     { 
       type: "Project",
       isLive: false,
-      label: "🚧 Story Generator",
+      label: "🚧📔 Story Generator",
       segments: [17],
     },
     { 
       type: "Project",
       isLive: false,
-      label: "🚧 Raspberry Pi",
+      label: "🚧💬 AsyncDebate",
       segments: [18],
     },
+    // { 
+    //   type: "Project",
+    //   isLive: false,
+    //   label: "🚧 Raspberry Pi",
+    //   segments: [18],
+    // },
     { 
       type: "Social",
       isLive: true,
@@ -49,12 +55,6 @@ export const menuItems: MenuItemType[] = [
       href: "https://github.com/MrT3313",
       iconType: "github",
       segments: [3],
-    },
-    { 
-      type: "Personal",
-      isLive: false,
-      label: "🚧 Finances",
-      segments: [0],
     },
     { 
       type: "Personal",

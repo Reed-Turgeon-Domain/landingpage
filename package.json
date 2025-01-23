@@ -1,7 +1,7 @@
 {
   "name": "landingpage",
   "type": "module",
-  "version": "0.4.1-OptimalInteractionUI",
+  "version": "0.4.2-UpdatedMenuItems",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
