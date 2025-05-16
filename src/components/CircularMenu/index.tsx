@@ -1,1 +1,1 @@
-export { default as CircularMenu } from './V2'
+export { default as CircularMenu } from './CircularMenu'
