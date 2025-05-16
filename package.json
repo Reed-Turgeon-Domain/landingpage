@@ -1,7 +1,7 @@
 {
   "name": "landingpage",
   "type": "module",
-  "version": "0.4.2-UpdatedMenuItems",
+  "version": "0.4.3-Copy/Link_Updates",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
