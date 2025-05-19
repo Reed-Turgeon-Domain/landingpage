@@ -1,6 +1,32 @@
 export const wdydtwData = [
   {
     dates:{
+      start: "2025-05-19",
+      end: "2025-05-25"
+    },
+    tasks: [
+      {
+        category: 'WRITING',
+        title: 'Electron Debugging',
+        update: 'Researched and wrote article outlining best practices for debugging Electron applications.',
+        // link: '',
+      }, 
+      {
+        category: 'CODING',
+        title: 'Electron Example / Template',
+        update: 'Implemented knowledge gained from Electron Debugging article into the Electron Example / Template repo.',
+        link: 'https://github.com/Learn-Like-Me-LLM/ELECTRON-EXAMPLE',
+      },
+      {
+        category: 'CODING',
+        title: 'Hourglass Attention Tracker',
+        update: 'Finalized V1 Application Structure & Schema. Implemented Github integration using OAuth and Octokit in order to sync projects & tasks',
+        link: 'https://github.com/Hourglass-Attention-Tracker/HAT-MVP-ELECTRON',
+      }
+    ]
+  },
+  {
+    dates:{
       start: "2025-05-12",
       end: "2025-05-18"
     },
@@ -13,8 +39,8 @@ export const wdydtwData = [
       },
       {
         category: 'WRITING',
-        title: 'Electron101',
-        update: 'Researched and wrote article outlining the main pillars of Electron.',
+        title: 'Electron 101: Building Cross-Platform Desktop Apps with Web Technologies',
+        update: 'Researched, wrote, and published article outlining the main pillars of Electron.',
         link: 'https://github.com/Mr-T-Writing/Electron-101/blob/main/electron_101.article.md',
       },
       {
@@ -25,51 +51,9 @@ export const wdydtwData = [
       },
     ],
     logs: {
-      running: [
-        {
-          date: '2025-05-12',
-          timestamp: new Date('2025-05-12').getTime(),
-          distance: 10,
-          time_in_minutes: 100,
-        },
-        {
-          date: '2025-05-13',
-          timestamp: new Date('2025-05-13').getTime(),
-          distance: 10,
-          time_in_minutes: 100,
-        },
-        {
-          date: '2025-05-16',
-          timestamp: new Date('2025-05-16').getTime(),
-          distance: 10,
-          time_in_minutes: 100,
-        },
-        
-      ],
-      pushups: [
-        {
-          date: '2025-05-12',
-          timestamp: new Date('2025-05-12').getTime(),
-          count: 10,
-        },
-        {
-          date: '2025-05-13',
-          timestamp: new Date('2025-05-13').getTime(),
-          count: 10,
-        } 
-      ],
-      weight: [
-        {
-          date: '2025-05-12',
-          timestamp: new Date('2025-05-12').getTime(),
-          weight_in_lbs: 100,
-        },
-        {
-          date: '2025-05-13',
-          timestamp: new Date('2025-05-13').getTime(),
-          weight_in_lbs: 100,
-        },
-      ],
+      running: [],
+      pushups: [],
+      weight: [],
     }
   },
 ]

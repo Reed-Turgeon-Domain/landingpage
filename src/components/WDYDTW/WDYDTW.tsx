@@ -71,7 +71,7 @@ const WDYDTW = ({
 
   useEffect(() => {
     if (!data) return
-    const filter = false
+    const filter = true
 
 
     if (!filter) {
