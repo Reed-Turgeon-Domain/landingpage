@@ -19,6 +19,7 @@ import MenuItemCard from './MenuItemCard'
 import ClickConfetti from '../Animations/ClickConfetti'
 
 type CircularMenuV2Props = {
+    zIndex?: string
     menuItems: MenuItemType[]
     diameter?: number
     total_segments?: number
@@ -26,6 +27,7 @@ type CircularMenuV2Props = {
 }
 const version = `V2`
 const CircularMenuV2 = ({ 
+    zIndex = 'z-0',
     menuItems,
     diameter = 400, 
     total_segments = 20,
@@ -234,7 +236,10 @@ const CircularMenuV2 = ({
     // RETURN //
     // ====== //
     return (
-        <div className={cx("fixed inset-0 flex items-center justify-center pointer-events-none")}>
+        <div className={cx(
+            zIndex,
+            "fixed inset-0 flex items-center justify-center pointer-events-none"
+        )}>
             {debug && (
                 <div>
                     <div className="absolute top-0 right-0">
@@ -352,7 +357,7 @@ const CircularMenuV2 = ({
                     cx={diameter / 2}
                     cy={diameter / 2}
                     r={diameter / 2}
-                    className="stroke-black fill-transparent"
+                    className="stroke-black fill-yellow-500"
                     strokeWidth="2"
                     strokeDasharray="4 4"
                 />
