@@ -19,8 +19,6 @@ const WeeklySubmission = ({
   onClick: () => void
   isOpenFull: boolean
 }) => {
-  console.log('Weekly Submission Data', data)
-  
   // Calculate random values that will change when key changes (component remounts)
   const { rotation, xOffset, yOffset } = useMemo(() => ({
     // Calculate a random rotation between -5 and 5 degrees

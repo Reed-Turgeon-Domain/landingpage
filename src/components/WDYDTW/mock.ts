@@ -8,13 +8,19 @@ export const wdydtwData = [
       {
         category: 'WRITING',
         title: 'Electron Debugging',
-        update: 'Researched and wrote article outlining best practices for debugging Electron applications.',
-        // link: '',
+        update: 'Drafting article outlining best practices for debugging Electron applications. Publish date assigned.',
+        link: 'https://github.com/Mr-T-Writing/Electron-Debugging',
       }, 
+      {
+        category: 'WRITING',
+        title: 'Electron Logging',
+        update: 'Drafting article outlining best practices for logging in Electron applications. Publish date assigned.',
+        link: 'https://github.com/Mr-T-Writing/Electron-Logging'
+      },
       {
         category: 'CODING',
         title: 'Electron Example / Template',
-        update: 'Implemented knowledge gained from Electron Debugging article into the Electron Example / Template repo.',
+        update: 'Implemented knowledge gained from research for Electron Debugging & Electron Logging articles into my accompanying the Electron Example application.',
         link: 'https://github.com/Learn-Like-Me-LLM/ELECTRON-EXAMPLE',
       },
       {

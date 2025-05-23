@@ -59,10 +59,16 @@ const WDYDTW = ({
   data = mockData,
   today = moment().toDate()
 }: { 
-  data: WeeklySubmissionData[] 
+  data: any[] 
   today: Date
 }) => {
-  const [filteredData, setFilteredData] = useState<WeeklySubmissionData[]>(data)
+  const [filteredData, setFilteredData] = useState<{
+    isOpen: any[],
+    isOpenFull: any[]
+  }>({
+    isOpen: [],
+    isOpenFull: []
+  })
   const [shuffleTrigger, setShuffleTrigger] = useState(Date.now())
   const [isOpen, setIsOpen] = useState(true)
   const [isOpenFull, setIsOpenFull] = useState(false)
@@ -71,16 +77,24 @@ const WDYDTW = ({
 
   useEffect(() => {
     if (!data) return
-    const filter = true
-
+    const filter = process.env.NODE_ENV === 'production' ? true : false
 
     if (!filter) {
-      setFilteredData(data)
+      const update = {
+        isOpen: [...data].reverse(),
+        isOpenFull: data
+      }
+      setFilteredData(update)
     } else {
-      setFilteredData(data.filter(el => {
+      const filtered = data.filter(el => {
         const today = new Date()
         return el.dates && today >= new Date(el.dates.end)
-      }))
+      })
+      const update = {
+        isOpen: [...filtered].reverse(),
+        isOpenFull: filtered
+      }
+      setFilteredData(update)
     }
   }, [data])
 
@@ -116,16 +130,11 @@ const WDYDTW = ({
     }
   }, [])
 
-  useEffect(() => {
-    if (!filteredData) return
-    console.log('WHAT IS THE FILTERED DATA', filteredData)
-  }, [filteredData])
-
   return (
     <div
       ref={modalRef}
       className={cx(
-        filteredData?.length > 0 ? 'flex flex-col' : 'hidden',
+        filteredData?.isOpen?.length > 0 ? 'flex flex-col' : 'hidden',
         'absolute bottom-0 right-0',
         "border-2",
         {
@@ -164,6 +173,7 @@ const WDYDTW = ({
         'flex',
         'flex-1',
         'relative',
+        'items-center',
         'px-4',
         'transition-all duration-300 ease-in-out',
         {
@@ -173,12 +183,23 @@ const WDYDTW = ({
           'overflow-hidden': !isOpenFull
         }
       )}>
-        {filteredData?.length > 0 && filteredData.map((ws, index) => (
+        {isOpenFull 
+        ? filteredData.isOpenFull.map((ws, index) => (
           <WeeklySubmission 
             key={`${index}-${shuffleTrigger}`}
             data={ws} 
             index={index}
-            total={filteredData.length}
+            total={filteredData.isOpenFull.length}
+            onClick={() => setIsOpenFull(!isOpenFull)}
+            isOpenFull={isOpenFull}
+          />
+        ))
+        : filteredData.isOpen.map((ws, index) => (
+          <WeeklySubmission 
+            key={`${index}-${shuffleTrigger}`}
+            data={ws} 
+            index={index}
+            total={filteredData.isOpen.length}
             onClick={() => setIsOpenFull(!isOpenFull)}
             isOpenFull={isOpenFull}
           />
