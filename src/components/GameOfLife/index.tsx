@@ -92,13 +92,20 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw cells
-    ctx.fillStyle = '#ffffff';
     let aliveCount = 0;
     
     for (let y = 0; y < gridData.height; y++) {
       for (let x = 0; x < gridData.width; x++) {
         if (gridData.cells[y][x]) {
           aliveCount++;
+          
+          // Use the cell's color if available, otherwise default to white
+          if (gridData.cellColors && gridData.cellColors[y][x]) {
+            ctx.fillStyle = gridData.cellColors[y][x];
+          } else {
+            ctx.fillStyle = '#ffffff';
+          }
+          
           ctx.fillRect(x * size, y * size, size, size);
         }
       }

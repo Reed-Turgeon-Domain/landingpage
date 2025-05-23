@@ -41,13 +41,19 @@ const GameOfLifeCanvas = memo(({
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw cells
-    ctx.fillStyle = '#ffffff';
-    
     let aliveCount = 0;
     for (let y = 0; y < grid.height; y++) {
       for (let x = 0; x < grid.width; x++) {
         if (grid.cells[y][x]) {
           aliveCount++;
+          
+          // Use the cell's color if available, otherwise default to white
+          if (grid.cellColors && grid.cellColors[y][x]) {
+            ctx.fillStyle = grid.cellColors[y][x];
+          } else {
+            ctx.fillStyle = '#ffffff';
+          }
+          
           ctx.fillRect(
             x * cellSize, 
             y * cellSize, 

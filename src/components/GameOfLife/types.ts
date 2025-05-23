@@ -2,12 +2,14 @@ export interface Cell {
   x: number
   y: number
   alive: boolean
+  color?: string
 }
 
 export interface GameGrid {
   width: number
   height: number
   cells: boolean[][]
+  cellColors?: string[][]
 }
 
 export interface GameState {
