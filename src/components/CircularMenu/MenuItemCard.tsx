@@ -25,6 +25,7 @@ type MenuItemCardProps = {
     syntheticPosition?: Point
     debug?: boolean
     interactionModality: 'touch' | 'mouse'
+    onHover?: (isHovering: boolean) => void
 }
 const MenuItemCard = ({ 
     item,
@@ -35,6 +36,7 @@ const MenuItemCard = ({
     syntheticPosition,
     debug = false,
     interactionModality,
+    onHover
 }: MenuItemCardProps) => {
     // REFS
     const containerRef = useRef<HTMLDivElement>(null)
@@ -109,8 +111,14 @@ const MenuItemCard = ({
         <div 
             ref={containerRef}
             className="flex relative"
-            onMouseEnter={() => setIsMouseHovering(true)}
-            onMouseLeave={() => setIsMouseHovering(false)}
+            onMouseEnter={() => {
+                setIsMouseHovering(true)
+                if (onHover) onHover(true)
+            }}
+            onMouseLeave={() => {
+                setIsMouseHovering(false)
+                if (onHover) onHover(false)
+            }}
             style={{ opacity: interactionModality === 'touch' ? 1 : (isMouseHovering ? 1 : opacity) }}
         >
             <div 

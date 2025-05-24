@@ -37,7 +37,7 @@ const ExpandingTitle = ({ onHoverChange, onClick, isOpen }: {
       }}
     >
       {isHovered || isOpen ? (
-        <span className="flex justify-center items-center w-full bg-gray-200 italic">
+        <span className="flex justify-center items-center w-full bg-teal-500 italic">
           {words.map((word, index) => (
             <span key={index} className={cx(
               index === words.length - 1 ? 'mr-0' : 'mr-1'
@@ -49,7 +49,7 @@ const ExpandingTitle = ({ onHoverChange, onClick, isOpen }: {
           <span>?</span>
         </span>
       ) : (
-        <span className="flex w-full font-bold italic justify-center bg-gray-200">WDYDTW?</span>
+        <span className="flex w-full font-bold italic justify-center bg-teal-500">WDYDTW?</span>
       )}
     </span>
   )
@@ -59,10 +59,16 @@ const WDYDTW = ({
   data = mockData,
   today = moment().toDate()
 }: { 
-  data: WeeklySubmissionData[] 
+  data: any[] 
   today: Date
 }) => {
-  const [filteredData, setFilteredData] = useState<WeeklySubmissionData[]>(data)
+  const [filteredData, setFilteredData] = useState<{
+    isOpen: any[],
+    isOpenFull: any[]
+  }>({
+    isOpen: [],
+    isOpenFull: []
+  })
   const [shuffleTrigger, setShuffleTrigger] = useState(Date.now())
   const [isOpen, setIsOpen] = useState(true)
   const [isOpenFull, setIsOpenFull] = useState(false)
@@ -71,16 +77,24 @@ const WDYDTW = ({
 
   useEffect(() => {
     if (!data) return
-    const filter = true
-
+    const filter = process.env.NODE_ENV === 'production' ? true : false
 
     if (!filter) {
-      setFilteredData(data)
+      const update = {
+        isOpen: [...data].reverse(),
+        isOpenFull: data
+      }
+      setFilteredData(update)
     } else {
-      setFilteredData(data.filter(el => {
+      const filtered = data.filter(el => {
         const today = new Date()
         return el.dates && today >= new Date(el.dates.end)
-      }))
+      })
+      const update = {
+        isOpen: [...filtered].reverse(),
+        isOpenFull: filtered
+      }
+      setFilteredData(update)
     }
   }, [data])
 
@@ -116,18 +130,15 @@ const WDYDTW = ({
     }
   }, [])
 
-  useEffect(() => {
-    if (!filteredData) return
-    console.log('WHAT IS THE FILTERED DATA', filteredData)
-  }, [filteredData])
-
   return (
     <div
       ref={modalRef}
       className={cx(
-        filteredData?.length > 0 ? 'flex flex-col' : 'hidden',
+        'WDYDTW',
+        'z-50',
+        filteredData?.isOpen?.length > 0 ? 'flex flex-col' : 'hidden',
         'absolute bottom-0 right-0',
-        "border-2",
+        'rounded-tl-lg',
         {
           'w-[400px]': isOpen,
           'w-[250px]': !isOpen
@@ -135,12 +146,11 @@ const WDYDTW = ({
         {
           'h-screen': isOpenFull,
           'h-[300px]': isOpen && !isOpenFull,
-          'h-[28px]': !isOpen
+          'h-[24px]': !isOpen
         },
-        'rounded',
         'bg-white',
-        'z-10',
         'transition-all duration-300 ease-in-out',
+        'overflow-hidden'
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -150,7 +160,6 @@ const WDYDTW = ({
         "w-full",
         'items-center justify-center',
         "bg-transparent",
-        "z-20",
         { 'p-0': !isOpen }
       )}>
         <ExpandingTitle 
@@ -162,27 +171,42 @@ const WDYDTW = ({
 
       <div className={cx(
         'flex',
-        'flex-1',
         'relative',
+        'items-center',
         'px-4',
         'transition-all duration-300 ease-in-out',
         {
+          'flex-1': isOpen,
+          'h-0': !isOpen,
           'opacity-100': isOpen,
-          'opacity-0 h-0': !isOpen,
+          'opacity-0': !isOpen,
           'flex-col gap-4 pt-4 overflow-y-auto': isOpenFull,
           'overflow-hidden': !isOpenFull
         }
       )}>
-        {filteredData?.length > 0 && filteredData.map((ws, index) => (
-          <WeeklySubmission 
-            key={`${index}-${shuffleTrigger}`}
-            data={ws} 
-            index={index}
-            total={filteredData.length}
-            onClick={() => setIsOpenFull(!isOpenFull)}
-            isOpenFull={isOpenFull}
-          />
-        ))}
+        {isOpen && (
+          isOpenFull 
+          ? filteredData.isOpenFull.map((ws, index) => (
+            <WeeklySubmission 
+              key={`${index}-${shuffleTrigger}`}
+              data={ws} 
+              index={index}
+              total={filteredData.isOpenFull.length}
+              onClick={() => setIsOpenFull(!isOpenFull)}
+              isOpenFull={isOpenFull}
+            />
+          ))
+          : filteredData.isOpen.map((ws, index) => (
+            <WeeklySubmission 
+              key={`${index}-${shuffleTrigger}`}
+              data={ws} 
+              index={index}
+              total={filteredData.isOpen.length}
+              onClick={() => setIsOpenFull(!isOpenFull)}
+              isOpenFull={isOpenFull}
+            />
+          ))
+        )}
       </div>
     </div>
   )

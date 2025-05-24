@@ -19,8 +19,6 @@ const WeeklySubmission = ({
   onClick: () => void
   isOpenFull: boolean
 }) => {
-  console.log('Weekly Submission Data', data)
-  
   // Calculate random values that will change when key changes (component remounts)
   const { rotation, xOffset, yOffset } = useMemo(() => ({
     // Calculate a random rotation between -5 and 5 degrees
@@ -43,7 +41,7 @@ const WeeklySubmission = ({
         'p-2',
         'rounded',
         'transition-all duration-500 ease-in-out',
-        'hover:z-10 hover:shadow-lg',
+        'hover:shadow-lg',
         {
           'absolute': !isOpenFull,
           'max-h-[200px] overflow-y-auto': !isOpenFull,
@@ -66,7 +64,6 @@ const WeeklySubmission = ({
         <div className={cx(
           "flex gap-2",
           "bg-white py-1 border-b mb-2",
-          "z-10",
           "text-sm"
         )}>
           <span>{`(${moment(data.dates.start).format('ddd')}) ${createDateFromYMD(data.dates.start).toLocaleDateString()}`}</span>

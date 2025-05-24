@@ -2,63 +2,29 @@
 import Layout from '../layouts/Layout.astro'
 import { CircularMenu } from '../components/CircularMenu/index'
 import { WDYDTW } from '../components/WDYDTW/index'
+import GameOfLife from '../components/GameOfLife/index'
 import { menuItems } from '../constants/menuItems'
+import { wdydtwData } from '../components/WDYDTW/mock'
 import cx from 'classnames'
 
 const DEBUG = false
+const today = new Date()
 ---
 
 <Layout title="Reed Turgeon" debug={DEBUG}>
+  <!-- Game of Life Background -->
+  <GameOfLife client:load />
+  
   <main class={cx(
-    "relative", 
+    "relative z-10", 
     "flex-1 flex flex-col", 
     'w-full h-full',
     "items-center justify-center", 
-    // "border-blue-500 border-4 border-dashed"
   )}>
-    <div class="flex flex-col justify-center items-center gap-2">
-      <!-- COPY -->
-      <div class="flex flex-col items-center justify-center text-center"> 
-        <span>I have a lot of projects.</span>
-        <span class="italic">I need a place to put them.</span>
-      </div>
-
-      <!-- CENTER / TOUCH SCREEN MENU -->
-      <div class="flex flex-col items-center justify-center">
-        <a 
-          href="https://llm.reedturgeon.com" 
-          target="_blank" 
-          class="text-sm text-[#4a90e2] no-underline hover:underline"
-          data-link="Learn Like Me"
-        >
-          Learn Like Me
-        </a>
-
-        <span>~</span>
-        
-        <a 
-          href="https://github.com/MrT3313" 
-          target="_blank" 
-          class="text-sm text-[#4a90e2] no-underline hover:underline"
-          data-link="GitHub"
-        >
-          GitHub
-        </a>
-        <a 
-          href="https://www.linkedin.com/in/reedturgeon/"
-          target="_blank" 
-          class="text-sm text-[#4a90e2] no-underline hover:underline"
-          data-link="LinkedIn"
-        >
-          LinkedIn
-        </a>
-      </div>
-    </div>
+    <CircularMenu menuItems={menuItems} client:load />
 
     <!-- What Did You Do This Week? -->
-    <WDYDTW client:load />
+    <WDYDTW client:load data={wdydtwData} today={today} />
   </main>
 
-  <CircularMenu menuItems={menuItems} client:load />
 </Layout>
-
