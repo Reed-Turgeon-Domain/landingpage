@@ -5,6 +5,7 @@ interface GameOfLifeControlsProps {
   isPlaying: boolean
   speed: number
   generation: number
+  isGameOver: boolean
   onTogglePlay: () => void
   onReset: () => void
   onClear: () => void
@@ -16,33 +17,30 @@ export const GameOfLifeControls = ({
   isPlaying,
   speed,
   generation,
+  isGameOver,
   onTogglePlay,
   onReset,
   onClear,
   onSpeedChange,
-  className = ''
 }: GameOfLifeControlsProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [showDebug, setShowDebug] = useState(false);
 
   return (
     <div className={cx(
-      'z-20',
-      'fixed bottom-4 left-4 z-20',
-      'bg-black/80 text-white rounded-lg',
+      'fixed bottom-4 left-4',
+      'text-white rounded-lg',
       'transition-all duration-300',
-      className
     )}>
       {isCollapsed ? (
         <button
           onClick={() => setIsCollapsed(false)}
-          className="p-2 text-xs hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-2 text-xs rounded-lg transition-colors bg-teal-500"
           title="Game of Life Controls"
         >
           🎮
         </button>
       ) : (
-        <div className="p-3 space-y-2">
+        <div className="p-3 space-y-2 bg-teal-500/70 rounded-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-medium">Game of Life</span>
             <button
@@ -61,12 +59,20 @@ export const GameOfLifeControls = ({
             
             <div className="text-xs text-white flex justify-between">
               <span>Status:</span>
-              <span className="font-bold">{isPlaying ? 'Running' : 'Paused'}</span>
+              <span className="font-bold">
+                {isGameOver ? 'GAME OVER' : isPlaying ? 'Running' : 'Paused'}
+              </span>
             </div>
             
             <div className="text-xs text-white">
               Speed: 1 generation per second
             </div>
+            
+            {isGameOver && (
+              <div className="text-sm text-white font-bold bg-red-700 p-2 rounded-md text-center mt-1">
+                GAME OVER
+              </div>
+            )}
           </div>
           
           <div className="flex gap-1">
@@ -74,12 +80,14 @@ export const GameOfLifeControls = ({
               onClick={onTogglePlay}
               className={cx(
                 'px-2 py-1 text-xs rounded transition-colors',
-                isPlaying 
-                  ? 'bg-red-600 hover:bg-red-700' 
-                  : 'bg-green-600 hover:bg-green-700'
+                isGameOver
+                  ? 'bg-purple-600 hover:bg-purple-700'
+                  : isPlaying 
+                    ? 'bg-red-600 hover:bg-red-700' 
+                    : 'bg-green-600 hover:bg-green-700'
               )}
             >
-              {isPlaying ? '⏸️ Pause' : '▶️ Play'}
+              {isGameOver ? '🎮 New Game' : isPlaying ? '⏸️ Pause' : '▶️ Play'}
             </button>
             
             <button
@@ -95,26 +103,6 @@ export const GameOfLifeControls = ({
             >
               🗑️ Clear
             </button>
-          </div>
-          
-          <div className="pt-1">
-            <button 
-              onClick={() => setShowDebug(!showDebug)}
-              className="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded transition-colors w-full"
-            >
-              {showDebug ? 'Hide Debug Info' : 'Show Debug Info'}
-            </button>
-            
-            {showDebug && (
-              <div className="mt-2 text-xs text-gray-300 bg-gray-800 p-2 rounded">
-                <p>Current generation: {generation}</p>
-                <p>Playing: {isPlaying ? 'Yes' : 'No'}</p>
-                <p>Speed: {speed}ms</p>
-                <p>Status: {isPlaying ? 'Running' : 'Paused'}</p>
-                <p className="mt-1">Click anywhere on the screen to toggle cells</p>
-                <p>Press SPACE to play/pause</p>
-              </div>
-            )}
           </div>
         </div>
       )}

@@ -9,17 +9,38 @@ import {
   clearGrid,
   getGridDimensions 
 } from './gameLogic'
+import { GameOfLifeControls } from './GameOfLifeControls'
+
+// Helper function to check if two game grids are identical
+const areGridsEqual = (gridA: GameGrid, gridB: GameGrid): boolean => {
+  if (gridA.width !== gridB.width || gridA.height !== gridB.height) {
+    return false;
+  }
+  
+  for (let y = 0; y < gridA.height; y++) {
+    for (let x = 0; x < gridA.width; x++) {
+      if (gridA.cells[y][x] !== gridB.cells[y][x]) {
+        return false;
+      }
+    }
+  }
+  
+  return true;
+};
 
 interface GameOfLifeProps {
   className?: string
+  zIndex?: string
 }
 
 // Game of Life component with direct imperative code
-const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
+const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
   // Component state
   const [grid, setGrid] = useState<GameGrid>(createEmptyGrid(1, 1));
   const [generation, setGeneration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true); // Start with game playing
+  const [speed, setSpeed] = useState(1000); // Speed in milliseconds
+  const [isGameOver, setIsGameOver] = useState(false); // Track game over state
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const initialized = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,6 +67,7 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
     
     // Reset generation
     setGeneration(0);
+    setIsGameOver(false);
     
     // Set up canvas size
     const canvas = canvasRef.current;
@@ -64,6 +86,7 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
       
       setGrid(newGrid);
       setGeneration(0);
+      setIsGameOver(false);
       
       if (canvas) {
         canvas.width = newDims.width * cellSize;
@@ -126,6 +149,21 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
     // Calculate the next generation grid
     const nextGrid = getNextGeneration(currentGrid);
     
+    // Check if the grid has reached a stable state
+    const gameHasEnded = areGridsEqual(currentGrid, nextGrid);
+    
+    if (gameHasEnded) {
+      console.log("Game has reached a stable state - GAME OVER");
+      setIsGameOver(true);
+      setIsPlaying(false);
+      
+      // Stop the game loop
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+    
     // Count alive cells for logging
     let beforeCount = 0;
     let afterCount = 0;
@@ -152,6 +190,9 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
   
   // Handle the game loop with setInterval
   useEffect(() => {
+    // Don't start if game is over
+    if (isGameOver) return;
+    
     // Start/stop the game loop based on isPlaying state
     if (isPlaying) {
       console.log("Starting game interval with 1 second delay");
@@ -161,11 +202,11 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
         clearInterval(timerRef.current);
       }
       
-      // Create new interval that fires every second
+      // Create new interval that fires at the current speed
       timerRef.current = setInterval(() => {
         console.log("Interval fired, advancing generation");
         nextGeneration();
-      }, 1000);
+      }, speed);
       
       // Cleanup function
       return () => {
@@ -183,16 +224,25 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
         timerRef.current = null;
       }
     }
-  }, [isPlaying, grid]); // Include grid to ensure we always use the latest grid state
+  }, [isPlaying, grid, speed, isGameOver]); // Include isGameOver to prevent restart if game is over
   
   // Toggle play/pause
   const togglePlay = () => {
+    // If game is over, reset the game instead of just toggling play state
+    if (isGameOver) {
+      resetGrid();
+      return;
+    }
+    
     console.log(`Toggling play state: ${!isPlaying}`);
     setIsPlaying(!isPlaying);
   };
   
   // Step forward one generation manually
   const stepForward = () => {
+    // Don't step if game is over
+    if (isGameOver) return;
+    
     console.log("Manually stepping forward one generation");
     nextGeneration();
   };
@@ -213,6 +263,7 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
     // Reset state
     setGrid(newGrid);
     setGeneration(0);
+    setIsGameOver(false);
     
     // Update canvas
     const canvas = canvasRef.current;
@@ -240,6 +291,7 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
     // Reset state
     setGrid(clearedGrid);
     setGeneration(0);
+    setIsGameOver(false);
     
     // Update canvas
     const canvas = canvasRef.current;
@@ -260,6 +312,11 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
     const y = Math.floor((event.clientY - rect.top) / cellSize);
     
     console.log(`Toggling cell at ${x},${y}`);
+    
+    // Reset game over state when user interacts with the grid
+    if (isGameOver) {
+      setIsGameOver(false);
+    }
     
     // Toggle cell and update grid
     const newGrid = toggleCell(grid, x, y);
@@ -283,70 +340,31 @@ const GameOfLife = ({ className = '' }: GameOfLifeProps) => {
   }, []);
   
   return (
-    <div className={cx('fixed inset-0 z-0', 'pointer-events-none', className)}>
-      {/* Controls at the top of the screen with higher z-index */}
-      <div className={cx(
-        'fixed top-4 right-4 z-50', // Positioned at top-right with high z-index
-        'bg-black/80 text-white rounded-lg',
-        'transition-all duration-300',
-        'pointer-events-auto'
-      )}>
-        <div className="p-3 space-y-2">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium">Game of Life</span>
-            <span className="text-xs font-bold">Gen: {generation}</span>
-          </div>
-          
-          <div className="flex gap-1">
-            <button
-              onClick={togglePlay}
-              className={cx(
-                'px-2 py-1 text-xs rounded transition-colors',
-                isPlaying 
-                  ? 'bg-red-600 hover:bg-red-700' 
-                  : 'bg-green-600 hover:bg-green-700'
-              )}
-            >
-              {isPlaying ? '⏸️ Pause' : '▶️ Play'}
-            </button>
-            
-            <button
-              onClick={resetGrid}
-              className="px-2 py-1 text-xs bg-[#4a90e2] hover:bg-blue-600 rounded transition-colors"
-            >
-              🔄 Reset
-            </button>
-            
-            <button
-              onClick={clearAllCells}
-              className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-700 rounded transition-colors"
-            >
-              🗑️ Clear
-            </button>
-            
-            <button
-              onClick={stepForward}
-              className="px-2 py-1 text-xs bg-yellow-600 hover:bg-yellow-700 rounded transition-colors"
-            >
-              ⏭️
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className={cx('flex', 'min-h-screen min-w-screen')}>
+      {/* Game canvas background */}
+      <canvas
+        ref={canvasRef}
+        className={cx("w-full h-full", zIndex)}
+        onClick={handleCanvasClick}
+        style={{
+          display: 'block',
+          imageRendering: 'pixelated',
+          backgroundColor: 'black'
+        }}
+      />
       
-      {/* Game canvas */}
-      <div className="pointer-events-auto">
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full"
-          onClick={handleCanvasClick}
-          style={{
-            display: 'block',
-            imageRendering: 'pixelated',
-            backgroundColor: 'black'
-          }}
-        />
-      </div>
+      {/* Controls on top of canvas */}
+      <GameOfLifeControls
+        isPlaying={isPlaying}
+        speed={speed}
+        generation={generation}
+        isGameOver={isGameOver}
+        onTogglePlay={togglePlay}
+        onReset={resetGrid}
+        onClear={clearAllCells}
+        onSpeedChange={setSpeed}
+        className="z-50"
+      />
     </div>
   );
 };

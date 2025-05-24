@@ -19,7 +19,6 @@ import MenuItemCard from './MenuItemCard'
 import ClickConfetti from '../Animations/ClickConfetti'
 
 type CircularMenuV2Props = {
-    zIndex?: string
     menuItems: MenuItemType[]
     diameter?: number
     total_segments?: number
@@ -27,7 +26,6 @@ type CircularMenuV2Props = {
 }
 const version = `V2`
 const CircularMenuV2 = ({ 
-    zIndex = 'z-0',
     menuItems,
     diameter = 400, 
     total_segments = 20,
@@ -48,6 +46,8 @@ const CircularMenuV2 = ({
         length_in_px: 0 
     })
     const [mouseInMenu, setMouseInMenu] = useState<boolean>(false)
+    const [isHoveringMenuItem, setIsHoveringMenuItem] = useState<boolean>(false)
+    const [isHoveringCornerElement, setIsHoveringCornerElement] = useState<boolean>(false)
 
     // STATE > confetti
     const [showConfetti, setShowConfetti] = useState<boolean>(false)
@@ -227,17 +227,49 @@ const CircularMenuV2 = ({
         setShowConfetti(true)
     }, [mouseInMenu, mouseInViewport, lastClickTime])
 
+    const handleMenuItemHover = useCallback((isHovering: boolean) => {
+        setIsHoveringMenuItem(isHovering)
+    }, [])
+
     useEffect(() => {
         window.addEventListener('click', handleClick)
         return () => window.removeEventListener('click', handleClick)
     }, [handleClick])
+
+    // Check if hovering over any corner UI elements
+    useEffect(() => {
+        if (!mouseInViewport || !mousePosition) {
+            setIsHoveringCornerElement(false)
+            return
+        }
+
+        // Check if mouse is over any corner element
+        const elementsAtPoint = document.elementsFromPoint(mousePosition.x, mousePosition.y)
+        const isOverCornerElement = elementsAtPoint.some(element => {
+            // Game of Life controls (bottom left)
+            if (element.closest('.fixed.bottom-4.left-4')) return true
+            
+            // "Under Construction" banner (top left)
+            if (element.closest('.fixed.top-2.left-2')) return true
+            
+            // Debug/breakpoints info (top right)
+            if (element.closest('#breakpointsInfo') || element.closest('#toggleBreakpoints')) return true
+            
+            // WDYDTW element (bottom right)
+            if (element.closest('.WDYDTW')) return true
+            
+            return false
+        })
+        
+        setIsHoveringCornerElement(isOverCornerElement)
+    }, [mousePosition, mouseInViewport])
 
     // ====== //
     // RETURN //
     // ====== //
     return (
         <div className={cx(
-            zIndex,
+            'z-100',
             "fixed inset-0 flex items-center justify-center pointer-events-none"
         )}>
             {debug && (
@@ -285,7 +317,7 @@ const CircularMenuV2 = ({
                     </div>
                     
                     <div 
-                        className="absolute w-[5px] h-[5px] bg-red-500 rounded-full"
+                        className="absolute w-[5px] h-[5px] bg-teal-500 rounded-full"
                         style={{ 
                             left: '50%',
                             top: '50%',
@@ -311,9 +343,9 @@ const CircularMenuV2 = ({
                 </div>
             )}
 
-            {!mouseInMenu && mouseInViewport && mousePosition && syntheticCursorPosition && (
+            {!mouseInMenu && mouseInViewport && mousePosition && syntheticCursorPosition && !isHoveringMenuItem && !isHoveringCornerElement && (
                 <div 
-                    className="fixed bg-red-500"
+                    className="fixed bg-teal-500"
                     style={{
                         width: '2px',
                         position: 'fixed',
@@ -331,12 +363,12 @@ const CircularMenuV2 = ({
                     }}
                 />
             )}
-            {mouseInViewport && mousePosition && (
+            {mouseInViewport && mousePosition && !isHoveringMenuItem && !isHoveringCornerElement && (
                 <div 
                     className={cx(
                         mouseInMenu && "hidden",
                         "fixed w-[10px] h-[10px] rounded-full",
-                        mouseInMenu ? "bg-teal-500" : "bg-red-500"
+                        mouseInMenu ? "bg-teal-500" : "bg-teal-500"
                     )}
                     style={{ 
                         left: mousePosition.x,
@@ -357,10 +389,25 @@ const CircularMenuV2 = ({
                     cx={diameter / 2}
                     cy={diameter / 2}
                     r={diameter / 2}
-                    className="stroke-black fill-yellow-500"
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
+                    className="stroke-black fill-teal-500"
+                    // strokeWidth="2"
+                    // strokeDasharray="4 4"
                 />
+                
+                {/* Center content */}
+                <foreignObject
+                    x={(diameter / 2) - 120}
+                    y={(diameter / 2) - 30}
+                    width="240"
+                    height="60"
+                >
+                    <div className="flex flex-col justify-center items-center gap-2 pointer-events-auto">
+                      <div className="flex flex-col items-center justify-center text-center gap-3"> 
+                        <span>I have a lot of projects.</span>
+                        <span className="italic">I need a place to put them.</span>
+                      </div>
+                    </div>
+                </foreignObject>
 
                 {Array.from({ length: total_segments }, (_, index) => (
                     <g key={index}>
@@ -402,6 +449,8 @@ const CircularMenuV2 = ({
                                                 mouseInMenu={mouseInMenu}
                                                 syntheticPosition={syntheticCursorPosition}
                                                 debug={debug}
+                                                interactionModality={isTouchOnly ? 'touch' : 'mouse'}
+                                                onHover={handleMenuItemHover}
                                             />
                                         </div>
                                     </foreignObject>

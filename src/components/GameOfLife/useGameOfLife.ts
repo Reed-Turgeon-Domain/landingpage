@@ -12,13 +12,31 @@ import {
 // Constant for exact 1-second interval
 const ONE_SECOND = 1000;
 
+// Helper function to check if two game grids are identical
+const areGridsEqual = (gridA: GameGrid, gridB: GameGrid): boolean => {
+  if (gridA.width !== gridB.width || gridA.height !== gridB.height) {
+    return false;
+  }
+  
+  for (let y = 0; y < gridA.height; y++) {
+    for (let x = 0; x < gridA.width; x++) {
+      if (gridA.cells[y][x] !== gridB.cells[y][x]) {
+        return false;
+      }
+    }
+  }
+  
+  return true;
+};
+
 export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config: GameOfLifeConfig) => {
   // Store entire game state in a ref to avoid re-renders
   const gameStateRef = useRef<GameState>({
     grid: createEmptyGrid(1, 1), // Default empty grid
     generation: 0,
     isPlaying: false,
-    speed: ONE_SECOND
+    speed: ONE_SECOND,
+    isGameOver: false
   });
   
   // Expose a limited version of the state to React for UI updates
@@ -42,7 +60,8 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
       grid,
       generation: 0,
       isPlaying: config.autoPlay,
-      speed: ONE_SECOND // Always use 1 second
+      speed: ONE_SECOND, // Always use 1 second
+      isGameOver: false
     };
     
     // Update display state
@@ -56,14 +75,32 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     const now = Date.now();
     const currentGen = gameStateRef.current.generation;
     const elapsed = now - lastUpdateRef.current;
+    const currentGrid = gameStateRef.current.grid;
     
     console.log(`GENERATION #${currentGen + 1} at ${now} (${elapsed}ms since last)`);
+    
+    // Calculate the next generation
+    const nextGrid = getNextGeneration(currentGrid);
+    
+    // Check if the game has reached a stable state (no changes between generations)
+    const gameHasEnded = areGridsEqual(currentGrid, nextGrid);
+    
+    if (gameHasEnded) {
+      console.log("Game has reached a stable state - GAME OVER");
+      // Stop the game loop
+      if (timerRef.current !== null) {
+        window.clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
     
     // Update the game state
     gameStateRef.current = {
       ...gameStateRef.current,
-      grid: getNextGeneration(gameStateRef.current.grid),
-      generation: currentGen + 1
+      grid: nextGrid,
+      generation: currentGen + 1,
+      isPlaying: gameHasEnded ? false : gameStateRef.current.isPlaying,
+      isGameOver: gameHasEnded
     };
     
     // Update display state
@@ -77,6 +114,9 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
   const startGameLoop = useCallback(() => {
     // Don't start if already running
     if (timerRef.current !== null) return;
+    
+    // Reset game over state when starting
+    gameStateRef.current.isGameOver = false;
     
     console.log("Starting game loop - 1 second per generation");
     lastUpdateRef.current = Date.now();
@@ -106,6 +146,12 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
 
   // Toggle play/pause
   const togglePlay = useCallback(() => {
+    // If game is over, reset before starting again
+    if (gameStateRef.current.isGameOver) {
+      resetGrid();
+      return;
+    }
+    
     if (gameStateRef.current.isPlaying) {
       stopGameLoop();
     } else {
@@ -115,6 +161,9 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
 
   // Advance one generation manually
   const nextGeneration = useCallback(() => {
+    // Don't advance if game is over
+    if (gameStateRef.current.isGameOver) return;
+    
     processGeneration();
   }, [processGeneration]);
 
@@ -131,7 +180,8 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     gameStateRef.current = {
       ...gameStateRef.current,
       grid: newGrid,
-      generation: 0
+      generation: 0,
+      isGameOver: false
     };
     
     // Update display state
@@ -149,7 +199,8 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     gameStateRef.current = {
       ...gameStateRef.current,
       grid: clearGrid(gameStateRef.current.grid),
-      generation: 0
+      generation: 0,
+      isGameOver: false
     };
     
     // Update display state
@@ -164,14 +215,23 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     
     console.log(`Toggling cell at ${x},${y}`);
     
+    // Reset game over state when user interacts with the grid
+    const isGameOver = gameStateRef.current.isGameOver;
+    
     // Update game state
     gameStateRef.current = {
       ...gameStateRef.current,
-      grid: toggleCell(gameStateRef.current.grid, x, y)
+      grid: toggleCell(gameStateRef.current.grid, x, y),
+      isGameOver: false
     };
     
     // Update display state
     setDisplayState({...gameStateRef.current});
+    
+    // If game was over and now user is interacting, reset the game over state
+    if (isGameOver) {
+      console.log("User interaction after game over - resetting game over state");
+    }
   }, []);
 
   // Set speed (always 1 second in this version)

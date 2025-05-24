@@ -37,7 +37,7 @@ const ExpandingTitle = ({ onHoverChange, onClick, isOpen }: {
       }}
     >
       {isHovered || isOpen ? (
-        <span className="flex justify-center items-center w-full bg-gray-200 italic">
+        <span className="flex justify-center items-center w-full bg-teal-500 italic">
           {words.map((word, index) => (
             <span key={index} className={cx(
               index === words.length - 1 ? 'mr-0' : 'mr-1'
@@ -49,7 +49,7 @@ const ExpandingTitle = ({ onHoverChange, onClick, isOpen }: {
           <span>?</span>
         </span>
       ) : (
-        <span className="flex w-full font-bold italic justify-center bg-gray-200">WDYDTW?</span>
+        <span className="flex w-full font-bold italic justify-center bg-teal-500">WDYDTW?</span>
       )}
     </span>
   )
@@ -134,9 +134,11 @@ const WDYDTW = ({
     <div
       ref={modalRef}
       className={cx(
+        'WDYDTW',
+        'z-50',
         filteredData?.isOpen?.length > 0 ? 'flex flex-col' : 'hidden',
         'absolute bottom-0 right-0',
-        "border-2",
+        'rounded-tl-lg',
         {
           'w-[400px]': isOpen,
           'w-[250px]': !isOpen
@@ -144,12 +146,11 @@ const WDYDTW = ({
         {
           'h-screen': isOpenFull,
           'h-[300px]': isOpen && !isOpenFull,
-          'h-[28px]': !isOpen
+          'h-[24px]': !isOpen
         },
-        'rounded',
         'bg-white',
-        'z-10',
         'transition-all duration-300 ease-in-out',
+        'overflow-hidden'
       )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -159,7 +160,6 @@ const WDYDTW = ({
         "w-full",
         'items-center justify-center',
         "bg-transparent",
-        "z-20",
         { 'p-0': !isOpen }
       )}>
         <ExpandingTitle 
@@ -171,39 +171,42 @@ const WDYDTW = ({
 
       <div className={cx(
         'flex',
-        'flex-1',
         'relative',
         'items-center',
         'px-4',
         'transition-all duration-300 ease-in-out',
         {
+          'flex-1': isOpen,
+          'h-0': !isOpen,
           'opacity-100': isOpen,
-          'opacity-0 h-0': !isOpen,
+          'opacity-0': !isOpen,
           'flex-col gap-4 pt-4 overflow-y-auto': isOpenFull,
           'overflow-hidden': !isOpenFull
         }
       )}>
-        {isOpenFull 
-        ? filteredData.isOpenFull.map((ws, index) => (
-          <WeeklySubmission 
-            key={`${index}-${shuffleTrigger}`}
-            data={ws} 
-            index={index}
-            total={filteredData.isOpenFull.length}
-            onClick={() => setIsOpenFull(!isOpenFull)}
-            isOpenFull={isOpenFull}
-          />
-        ))
-        : filteredData.isOpen.map((ws, index) => (
-          <WeeklySubmission 
-            key={`${index}-${shuffleTrigger}`}
-            data={ws} 
-            index={index}
-            total={filteredData.isOpen.length}
-            onClick={() => setIsOpenFull(!isOpenFull)}
-            isOpenFull={isOpenFull}
-          />
-        ))}
+        {isOpen && (
+          isOpenFull 
+          ? filteredData.isOpenFull.map((ws, index) => (
+            <WeeklySubmission 
+              key={`${index}-${shuffleTrigger}`}
+              data={ws} 
+              index={index}
+              total={filteredData.isOpenFull.length}
+              onClick={() => setIsOpenFull(!isOpenFull)}
+              isOpenFull={isOpenFull}
+            />
+          ))
+          : filteredData.isOpen.map((ws, index) => (
+            <WeeklySubmission 
+              key={`${index}-${shuffleTrigger}`}
+              data={ws} 
+              index={index}
+              total={filteredData.isOpen.length}
+              onClick={() => setIsOpenFull(!isOpenFull)}
+              isOpenFull={isOpenFull}
+            />
+          ))
+        )}
       </div>
     </div>
   )

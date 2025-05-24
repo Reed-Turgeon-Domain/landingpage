@@ -17,6 +17,7 @@ export interface GameState {
   generation: number
   isPlaying: boolean
   speed: number
+  isGameOver: boolean
 }
 
 export interface GameOfLifeConfig {
