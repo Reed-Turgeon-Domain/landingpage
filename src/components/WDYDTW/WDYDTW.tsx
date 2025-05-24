@@ -192,7 +192,7 @@ const WDYDTW = ({
               data={ws} 
               index={index}
               total={filteredData.isOpenFull.length}
-              onClick={() => setIsOpenFull(!isOpenFull)}
+              onClick={null}
               isOpenFull={isOpenFull}
             />
           ))

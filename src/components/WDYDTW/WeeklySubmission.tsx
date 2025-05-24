@@ -16,7 +16,7 @@ const WeeklySubmission = ({
   data: WeeklySubmissionData
   index: number
   total: number 
-  onClick: () => void
+  onClick: () => void | null
   isOpenFull: boolean
 }) => {
   // Calculate random values that will change when key changes (component remounts)
@@ -58,7 +58,7 @@ const WeeklySubmission = ({
         // Just rotation and offset when full
         transform: `rotate(${rotation}deg) translate(${xOffset}px, ${yOffset}px)`,
       }}
-      onClick={onClick}
+      {...onClick && { onClick }}
     >
       {data.dates && (
         <div className={cx(
@@ -79,7 +79,13 @@ const WeeklySubmission = ({
           {data.tasks.map((task, i) => (
             <div key={i} className="flex flex-col pl-2">
               <span className="font-medium">{`${task.category} - ${task.title}`}</span>
-              <span className="text-xs text-gray-600 mt-1">{task.update}</span>
+              <ul className="list-disc leading-none pl-6" style={{ listStyleType: 'disc' }}>
+                {task.updates.map((update, idx) => (
+                  <li key={idx} className="">
+                    <span className="text-xs text-gray-600 mt-1">{update}</span>
+                  </li>
+                ))}
+              </ul>
               {task.link && <span className="text-sm italic mt-1">
                 <a 
                   href={task.link} 

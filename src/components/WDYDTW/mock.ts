@@ -8,31 +8,34 @@ export const wdydtwData = [
       {
         category: 'WRITING',
         title: 'Electron Debugging',
-        update: 'Drafting article outlining best practices for debugging Electron applications. Publish date assigned.',
+        updates: ['Drafting article outlining best practices for debugging Electron applications. Publish date assigned.'],
         link: 'https://github.com/Mr-T-Writing/Electron-Debugging',
       }, 
       {
         category: 'WRITING',
         title: 'Electron Logging',
-        update: 'Drafting article outlining best practices for logging in Electron applications. Publish date assigned.',
+        updates: ['Drafting article outlining best practices for logging in Electron applications. Publish date assigned.'],
         link: 'https://github.com/Mr-T-Writing/Electron-Logging'
       },
       {
         category: 'CODING',
         title: 'Electron Example / Template',
-        update: 'Implemented knowledge gained from research for Electron Debugging & Electron Logging articles into my accompanying the Electron Example application.',
+        updates: ['Implemented knowledge gained from research for Electron Debugging & Electron Logging articles into my accompanying the Electron Example application.'],
         link: 'https://github.com/Learn-Like-Me-LLM/ELECTRON-EXAMPLE',
       },
       {
         category: 'CODING',
         title: 'Hourglass Attention Tracker',
-        update: 'Finalized V1 Application Structure & Schema. Implemented Github integration using OAuth and Octokit in order to sync projects & tasks',
+        updates: [
+          'Finalized V1 Application Structure & Schema.', 
+          'Implemented Github integration using OAuth and Octokit in order to sync projects & tasks'
+        ],
         link: 'https://github.com/Hourglass-Attention-Tracker/HAT-MVP-ELECTRON',
       },
       {
         category: 'CODING',
         title: '[DOMAIN] reedturgeon.com',
-        update: 'Added live & interactable Game of Life background canvas to the landing page.',
+        updates: ['Added live & interactable Game of Life background canvas to the landing page.'],
       }
     ]
   },
@@ -45,19 +48,19 @@ export const wdydtwData = [
       {
         category: 'CODING',
         title: 'Hourglass Attention Tracker',
-        update: 'New application to better manage / track where my time is going (prep for graduate school). I am also using this project as an excuse to learn Electron. Got far enough to realize I needed to dive deeper into Electron - hense the WRITING:Electron101 article and the CODING:Electron Example / Template repo.',
+        updates: ['New application to better manage / track where my time is going (prep for graduate school). I am also using this project as an excuse to learn Electron. Got far enough to realize I needed to dive deeper into Electron - hense the WRITING:Electron101 article and the CODING:Electron Example / Template repo.'],
         link: 'https://github.com/Hourglass-Attention-Tracker/HAT-MVP-ELECTRON'
       },
       {
         category: 'WRITING',
         title: 'Electron 101: Building Cross-Platform Desktop Apps with Web Technologies',
-        update: 'Researched, wrote, and published article outlining the main pillars of Electron.',
+        updates: ['Researched, wrote, and published article outlining the main pillars of Electron.'],
         link: 'https://github.com/Mr-T-Writing/Electron-101/blob/main/electron_101.article.md',
       },
       {
         category: 'CODING',
         title: 'Electron Example / Template',
-        update: 'Based on research for Electron101 article I configured a full Electron template repo using Electron, Vite, Tanstack Router, React, Typescript, SQLite, and Drizzle.',
+        updates: ['Based on research for Electron101 article I configured a full Electron template repo using Electron, Vite, Tanstack Router, React, Typescript, SQLite, and Drizzle.'],
         link: 'https://github.com/Learn-Like-Me-LLM/ELECTRON-EXAMPLE',
       },
     ],
