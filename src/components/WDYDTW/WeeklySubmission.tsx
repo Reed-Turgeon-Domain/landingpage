@@ -75,7 +75,6 @@ const WeeklySubmission = ({
       {/* TASKS */}
       {data.tasks?.length > 0 && (
         <div className="flex flex-col gap-2">
-          <span className="font-bold">Tasks:</span>
           {data.tasks.map((task, i) => (
             <div key={i} className="flex flex-col pl-2">
               <span className="font-medium">{`${task.category} - ${task.title}`}</span>
