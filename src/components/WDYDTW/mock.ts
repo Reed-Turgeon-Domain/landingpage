@@ -28,6 +28,11 @@ export const wdydtwData = [
         title: 'Hourglass Attention Tracker',
         update: 'Finalized V1 Application Structure & Schema. Implemented Github integration using OAuth and Octokit in order to sync projects & tasks',
         link: 'https://github.com/Hourglass-Attention-Tracker/HAT-MVP-ELECTRON',
+      },
+      {
+        category: 'CODING',
+        title: '[DOMAIN] reedturgeon.com',
+        update: 'Added live & interactable Game of Life background canvas to the landing page.',
       }
     ]
   },
