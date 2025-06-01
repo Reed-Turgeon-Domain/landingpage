@@ -47,7 +47,7 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
   
   // Configuration (fixed)
   const cellSize = 20;
-  const initialDensity = 0.12;
+  const initialDensity = 0.25;
   
   // Initialize only once
   useEffect(() => {
