@@ -1,6 +1,34 @@
 export const wdydtwData = [
   {
     dates:{
+      start: "2025-05-26",
+      end: "2025-06-01"
+    },
+    tasks: [
+      {
+        category: 'WRITING',
+        title: 'Electron Logging w/ electron-log',
+        updates: ['Published article outlining best practices for logging in Electron applications using electron-log.'],
+        link: 'https://github.com/Mr-T-Writing/Electron-Logging'
+      },
+      {
+        category: 'GRADUATE SCHOOL',
+        title: 'Orientation & S1 Course Registration',
+        updates: ['Completed orientation and registered for 3 classes (9 credits) for the upcoming semester.'],
+      },
+      {
+        category: 'CODING',
+        title: 'OSS NPM Module : create-electron-foundation',
+        updates: [
+          'Building off of the Electron Example / Template repo, I started creating a new NPM package that scaffolds a new Electron application with a few key features pre-configured.',
+          'I am taking heavy inspiration from `npm create t3-app@latest`',
+          'Basic cli w/ npm linked create-electron-foundation is working but I am improving the configuration options',
+        ]
+      }
+    ]
+  },
+  {
+    dates:{
       start: "2025-05-19",
       end: "2025-05-25"
     },
