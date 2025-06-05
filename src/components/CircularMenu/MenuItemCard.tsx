@@ -2,7 +2,11 @@ import React, { type ComponentType, useState, useRef, useEffect } from 'react'
 import cx from 'classnames'
 
 // ICONS
-import { FaGithub, FaLinkedin } from "react-icons/fa"
+import { 
+    Substack,
+    Github, 
+    LinkedIn, 
+} from '../Icons'
 import { MdAlternateEmail } from "react-icons/md";
 
 // TYPES
@@ -89,21 +93,16 @@ const MenuItemCard = ({
     }, [syntheticPosition, isMouseHovering])
 
     
-    const renderIcon = (iconType: "github" | "linkedin" | "email") => {
-        // TODO: BUG (icon rendering) - 👀 this is driving me up a wall
-        //                  why cant I just have an Icon: <FaGithub size={24} /> in the const menuItems array 
-        //                  and render <Icon /> or <item.Icon/>?
-        const iconProps = { 
-            size: 24,
-        }
-        
+    const renderIcon = (iconType: "github" | "linkedin" | "email" | "substack") => {
         switch (iconType) {
+            case "substack":
+                return <Substack />
             case "github":
-                return <FaGithub {...iconProps} />
+                return <Github className="w-5 h-5" />
             case "linkedin":
-                return <FaLinkedin {...iconProps} />
+                return <LinkedIn className="w-5 h-5" />
             case "email":
-                return <MdAlternateEmail {...iconProps} />
+                return <MdAlternateEmail size={24} />
         }
     }
 

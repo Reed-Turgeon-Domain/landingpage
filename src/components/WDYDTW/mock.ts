@@ -1,6 +1,29 @@
 export const wdydtwData = [
   {
     dates:{
+      start: "2025-06-02",
+      end: "2025-06-08"
+    },
+    tasks: [
+      {
+        category: 'CODING',
+        title: 'OSS NPM Module : create-electron-foundation',
+        updates: [
+          'Configuration Options: Routers (Tanstack Router, React Router) | Styling (Tailwind, CSS)',
+          'Added Github Actions to publish to NPM / Github registry',
+        ]
+      },
+      {
+        category: 'WRITING',
+        title: 'NPM Package Management',
+        updates: [
+          'Drafting article on my journey to publish and manage my create-electron-foundation NPM module'
+        ]
+      }
+    ]
+  },
+  {
+    dates:{
       start: "2025-05-26",
       end: "2025-06-01"
     },

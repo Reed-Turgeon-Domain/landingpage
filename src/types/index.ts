@@ -17,7 +17,7 @@ export interface MenuItemType {
   label: string
   href?: string
   hex?: string
-  iconType?: "github" | "linkedin" | "email"
+  iconType?: "github" | "linkedin" | "email" | "substack"
   segments: number[]
 }
 

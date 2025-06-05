@@ -69,7 +69,15 @@ export const menuItems: MenuItemType[] = [
       label: "Reach Out",
       href: "mailto:turgeon.dev+reedturgeon.com@gmail.com",
       iconType: "email",
-      segments: [8],
+      segments: [6],
+    },
+    { 
+      type: "Social",
+      isLive: true,
+      label: "Substack",
+      href: "https://reedturgeon.substack.com",
+      iconType: "substack",
+      segments: [10],
     },
 ]
 

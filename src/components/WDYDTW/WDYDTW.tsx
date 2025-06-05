@@ -87,8 +87,9 @@ const WDYDTW = ({
       setFilteredData(update)
     } else {
       const filtered = data.filter(el => {
-        const today = new Date()
-        return el.dates && today >= new Date(el.dates.end)
+        const now = moment().endOf('day')
+        const end = moment(el.dates.end).endOf('day')
+        return el.dates && now.isAfter(end)
       })
       const update = {
         isOpen: [...filtered].reverse(),
