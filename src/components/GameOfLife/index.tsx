@@ -54,8 +54,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     if (initialized.current) return;
     initialized.current = true;
     
-    console.log("GameOfLife: Initial setup");
-    
     // Get window dimensions
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -133,15 +131,10 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
         }
       }
     }
-    
-    console.log(`Generation ${gen}: Rendered ${aliveCount} alive cells`);
   };
   
   // Process next generation - core game logic
   const nextGeneration = () => {
-    // Log current state
-    console.log(`Processing generation ${generation} -> ${generation + 1}`);
-    
     // Get the current grid
     const currentGen = generation;
     const currentGrid = grid;
@@ -153,7 +146,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     const gameHasEnded = areGridsEqual(currentGrid, nextGrid);
     
     if (gameHasEnded) {
-      console.log("Game has reached a stable state - GAME OVER");
       setIsGameOver(true);
       setIsPlaying(false);
       
@@ -175,8 +167,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
       }
     }
     
-    console.log(`Cells: ${beforeCount} -> ${afterCount}`);
-    
     // Update state with new generation
     setGeneration(currentGen + 1);
     setGrid(nextGrid);
@@ -195,8 +185,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     
     // Start/stop the game loop based on isPlaying state
     if (isPlaying) {
-      console.log("Starting game interval with 1 second delay");
-      
       // Clear any existing interval
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -204,13 +192,11 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
       
       // Create new interval that fires at the current speed
       timerRef.current = setInterval(() => {
-        console.log("Interval fired, advancing generation");
         nextGeneration();
       }, speed);
       
       // Cleanup function
       return () => {
-        console.log("Cleaning up interval");
         if (timerRef.current) {
           clearInterval(timerRef.current);
           timerRef.current = null;
@@ -218,7 +204,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
       };
     } else {
       // Stop the interval if game is paused
-      console.log("Game paused, clearing interval");
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -234,7 +219,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
       return;
     }
     
-    console.log(`Toggling play state: ${!isPlaying}`);
     setIsPlaying(!isPlaying);
   };
   
@@ -243,7 +227,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     // Don't step if game is over
     if (isGameOver) return;
     
-    console.log("Manually stepping forward one generation");
     nextGeneration();
   };
   
@@ -272,8 +255,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
       canvas.height = dims.height * cellSize;
       drawGrid(canvas, newGrid, cellSize, 0);
     }
-    
-    console.log("Grid reset to generation #0");
   };
   
   // Clear all cells
@@ -298,8 +279,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     if (canvas) {
       drawGrid(canvas, clearedGrid, cellSize, 0);
     }
-    
-    console.log("Grid cleared to generation #0");
   };
   
   // Handle canvas click
@@ -310,8 +289,6 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     const rect = canvas.getBoundingClientRect();
     const x = Math.floor((event.clientX - rect.left) / cellSize);
     const y = Math.floor((event.clientY - rect.top) / cellSize);
-    
-    console.log(`Toggling cell at ${x},${y}`);
     
     // Reset game over state when user interacts with the grid
     if (isGameOver) {

@@ -67,7 +67,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     // Update display state
     setDisplayState({...gameStateRef.current});
     
-    console.log(`Game initialized with grid ${width}x${height}, speed: ${ONE_SECOND}ms`);
   }, [canvasWidth, canvasHeight, config.cellSize, config.initialDensity, config.autoPlay]);
 
   // Process one generation
@@ -77,8 +76,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     const elapsed = now - lastUpdateRef.current;
     const currentGrid = gameStateRef.current.grid;
     
-    console.log(`GENERATION #${currentGen + 1} at ${now} (${elapsed}ms since last)`);
-    
     // Calculate the next generation
     const nextGrid = getNextGeneration(currentGrid);
     
@@ -86,7 +83,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     const gameHasEnded = areGridsEqual(currentGrid, nextGrid);
     
     if (gameHasEnded) {
-      console.log("Game has reached a stable state - GAME OVER");
       // Stop the game loop
       if (timerRef.current !== null) {
         window.clearInterval(timerRef.current);
@@ -118,7 +114,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     // Reset game over state when starting
     gameStateRef.current.isGameOver = false;
     
-    console.log("Starting game loop - 1 second per generation");
     lastUpdateRef.current = Date.now();
     
     // Use setInterval for precise timing
@@ -135,7 +130,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
   const stopGameLoop = useCallback(() => {
     if (timerRef.current === null) return;
     
-    console.log("Stopping game loop");
     window.clearInterval(timerRef.current);
     timerRef.current = null;
     
@@ -174,8 +168,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     const dims = getGridDimensions(width, height, config.cellSize);
     const newGrid = createRandomGrid(dims.width, dims.height, config.initialDensity);
     
-    console.log(`Resetting grid to ${dims.width}x${dims.height}, generation #0`);
-    
     // Update game state
     gameStateRef.current = {
       ...gameStateRef.current,
@@ -192,8 +184,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
   const clearAllCells = useCallback(() => {
     // Get current grid dimensions
     const { width, height } = gameStateRef.current.grid;
-    
-    console.log(`Clearing grid ${width}x${height}, resetting to generation #0`);
     
     // Update game state
     gameStateRef.current = {
@@ -213,8 +203,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     const { width, height } = gameStateRef.current.grid;
     if (x < 0 || x >= width || y < 0 || y >= height) return;
     
-    console.log(`Toggling cell at ${x},${y}`);
-    
     // Reset game over state when user interacts with the grid
     const isGameOver = gameStateRef.current.isGameOver;
     
@@ -227,17 +215,11 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
     
     // Update display state
     setDisplayState({...gameStateRef.current});
-    
-    // If game was over and now user is interacting, reset the game over state
-    if (isGameOver) {
-      console.log("User interaction after game over - resetting game over state");
-    }
   }, []);
 
   // Set speed (always 1 second in this version)
   const setSpeed = useCallback((_newSpeed: number) => {
     // Do nothing - speed is fixed at 1 second
-    console.log("Speed changes ignored - fixed at 1 second per generation");
   }, []);
 
   // Resize grid
@@ -259,7 +241,6 @@ export const useGameOfLife = (canvasWidth: number, canvasHeight: number, config:
       if (timerRef.current !== null) {
         window.clearInterval(timerRef.current);
         timerRef.current = null;
-        console.log("Cleaning up game loop");
       }
     };
   }, []);

@@ -1,6 +1,54 @@
 export const wdydtwData = [
   {
     dates:{
+      start: "2025-06-09",
+      end: "2025-06-15"
+    },
+    tasks: [
+      {
+        category: 'CODING',
+        title: 'OSS CLI NPM Package : npx create-electron-foundation',
+        updates: [
+          'Final Configuration & Review for NPM Package "npx create-electron-foundation"',
+          'Published VA.1.0.0 to NPM Registry',
+        ],
+        link: 'https://reedturgeon.substack.com/p/come-check-out-my-package-pause',
+      },
+      {
+        category: 'Writing [Substack]',
+        title: 'My Road to NPM Fame',
+        updates: [
+          'Wrote & Published First Substack Article: "My road to NPM Fame" covering how I built create-electron-foundation'
+        ],
+        link: 'https://reedturgeon.substack.com/p/come-check-out-my-package-pause',
+      },
+    ]
+  },
+  {
+    dates:{
+      start: "2025-06-02",
+      end: "2025-06-08"
+    },
+    tasks: [
+      {
+        category: 'CODING',
+        title: 'OSS CLI NPM Package : npx create-electron-foundation',
+        updates: [
+          'Configuration Options: Routers (Tanstack Router, React Router) | Styling (Tailwind, CSS)',
+          'Added Github Actions to publish to NPM / Github registry',
+        ],
+      },
+      {
+        category: 'WRITING',
+        title: 'NPM Package Management',
+        updates: [
+          'Drafting article on my journey to publish and manage my create-electron-foundation NPM module'
+        ]
+      }
+    ]
+  },
+  {
+    dates:{
       start: "2025-05-26",
       end: "2025-06-01"
     },
@@ -18,7 +66,7 @@ export const wdydtwData = [
       },
       {
         category: 'CODING',
-        title: 'OSS NPM Module : create-electron-foundation',
+        title: 'OSS CLI NPM Package : npx create-electron-foundation',
         updates: [
           'Building off of the Electron Example / Template repo, I started creating a new NPM package that scaffolds a new Electron application with a few key features pre-configured.',
           'I am taking heavy inspiration from `npm create t3-app@latest`',

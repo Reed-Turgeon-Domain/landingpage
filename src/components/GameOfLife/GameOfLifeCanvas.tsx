@@ -33,9 +33,6 @@ const GameOfLifeCanvas = memo(({
       return;
     }
     
-    // Log grid dimensions for debugging
-    console.log(`Drawing grid: ${grid.width}x${grid.height} cells, canvas: ${canvas.width}x${canvas.height}px`);
-    
     // Clear with black background
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -63,8 +60,6 @@ const GameOfLifeCanvas = memo(({
         }
       }
     }
-    
-    console.log(`Rendered ${aliveCount} alive cells`);
   }, [grid, cellSize]);
 
   // Handle click on canvas
@@ -75,8 +70,7 @@ const GameOfLifeCanvas = memo(({
     const rect = canvas.getBoundingClientRect();
     const x = Math.floor((event.clientX - rect.left) / cellSize);
     const y = Math.floor((event.clientY - rect.top) / cellSize);
-    
-    console.log(`Cell clicked at ${x},${y}`);
+
     onCellClick(x, y);
   }, [cellSize, onCellClick]);
 
@@ -92,7 +86,6 @@ const GameOfLifeCanvas = memo(({
     const gridWidthPx = grid.width * cellSize;
     const gridHeightPx = grid.height * cellSize;
     
-    console.log(`Setting canvas size to ${gridWidthPx}x${gridHeightPx}px`);
     canvas.width = gridWidthPx;
     canvas.height = gridHeightPx;
     
@@ -109,11 +102,9 @@ const GameOfLifeCanvas = memo(({
     
     // Check if grid reference has changed
     if (prevGridRef.current === grid) {
-      console.log("Grid reference unchanged, skipping render");
       return;
     }
     
-    console.log("Grid changed, redrawing canvas");
     drawGrid();
     prevGridRef.current = grid;
   }, [grid, drawGrid]);
