@@ -12,7 +12,7 @@ export const wdydtwData = [
           'Final Configuration & Review for NPM Package "npx create-electron-foundation"',
           'Published VA.1.0.0 to NPM Registry',
         ],
-        link: 'https://reedturgeon.substack.com/p/come-check-out-my-package-pause',
+        link: 'https://www.npmjs.com/package/create-electron-foundation',
       },
       {
         category: 'Writing [Substack]',
