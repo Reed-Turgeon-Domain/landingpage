@@ -1,7 +1,7 @@
 {
   "name": "landingpage",
   "type": "module",
-  "version": "0.4.3-Copy/Link_Updates",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
