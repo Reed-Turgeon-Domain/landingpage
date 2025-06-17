@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react'
-import { type Point } from '../../types'
+import React, { useEffect, useState } from 'react'
+
+// TYPES
+import type { Color, Colors } from './types'
+import type { Point } from '../../types'
 
 type ConfettiParticle = {
   id: number
   x: number
   y: number
-  color: string
+  color: Color
   angle: number
   speed: number
   size: number
@@ -13,13 +16,17 @@ type ConfettiParticle = {
 
 type ClickConfettiProps = {
   position: Point
+  colors?: Colors
   onAnimationComplete: () => void
 }
 
-const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD']
 const PARTICLE_COUNT = 20
 
-const ClickConfetti = ({ position, onAnimationComplete }: ClickConfettiProps) => {
+const ClickConfetti = ({ 
+  position, 
+  onAnimationComplete,
+  colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'],
+}: ClickConfettiProps) => {
   const [particles, setParticles] = useState<ConfettiParticle[]>([])
 
   useEffect(() => {
@@ -27,7 +34,7 @@ const ClickConfetti = ({ position, onAnimationComplete }: ClickConfettiProps) =>
       id: i,
       x: position.x,
       y: position.y,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      color: colors[Math.floor(Math.random() * colors.length)],
       angle: (Math.random() * Math.PI * 2),
       speed: 2 + Math.random() * 4,
       size: 4 + Math.random() * 4
