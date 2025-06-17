@@ -1,14 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import cx from 'classnames';
-import { IoClose } from 'react-icons/io5';
-import InteractionModality from '../InteractionModality';
 
+// ICONS
+import { IoClose } from 'react-icons/io5';
+
+// COMPONENTS
+import { LayoutCorner } from './LayoutCorner';
+import InteractionModality from '../InteractionModality';
+import { WDYDTW } from '../WDYDTW';
+import { wdydtwData } from '../WDYDTW/mock';
 interface LayoutProps {
   debug?: boolean;
   children: React.ReactNode;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ debug = false, children }) => {
+// CONSTS
+const today = new Date()
+
+export const Layout: React.FC<LayoutProps> = ({ debug = true, children }) => {
   const [isBreakpointsVisible, setBreakpointsVisible] = useState(false);
   
   const viewportInfoRef = useRef<HTMLDivElement>(null);
@@ -126,51 +135,67 @@ export const Layout: React.FC<LayoutProps> = ({ debug = false, children }) => {
             "landscape-mobile:border-yellow-400",
             "landscape-tablet:border-red-400",
             "landscape-desktop:border-pink-400",
-        ]
+        ],
     )}>
-        {!isBreakpointsVisible && (
-            <button
-                onClick={() => setBreakpointsVisible(true)}
-                className="fixed right-2 top-2 bg-teal-500 text-white rounded-lg px-3 py-1 text-sm transition-colors z-40"
-            >
-                ?
-            </button>
-        )}
-
-        {isBreakpointsVisible && (
-            <div 
-                onClick={() => setBreakpointsVisible(false)}
-                className="fixed right-2 top-2 bg-teal-500/70 text-white rounded-lg text-xs p-4 cursor-pointer min-w-fit ml-2 z-40"
-            >
-                <div className="absolute top-2 left-2">
-                    <IoClose />
-                </div>
-                <div id="breakpointsLayout" ref={breakpointsLayoutRef} className="flex flex-col gap-4">
-                    <div className="flex gap-4">
-                        <div className="flex flex-col items-end justify-center">
-                            <h3 className="font-bold mb-2">Viewport</h3>
-                            <div ref={viewportInfoRef} className="px-2 py-1 rounded"></div>
+        {!isBreakpointsVisible ? (
+            <LayoutCorner {...{ corner: 'top-right' }}>
+                <button
+                    onClick={() => setBreakpointsVisible(true)}
+                    className="flex px-3 py-1 text-sm hover:cursor-pointer"
+                >
+                    ?
+                </button>
+            </LayoutCorner>
+        ) : (
+            <LayoutCorner {...{ corner: 'top-right' }}>
+                <div 
+                    onClick={() => setBreakpointsVisible(false)}
+                    className="relative text-xs p-4 cursor-pointer min-w-fit ml-2 z-40"
+                >
+                    <div className="absolute top-2 left-2">
+                        <IoClose />
+                    </div>
+                    <div id="breakpointsLayout" ref={breakpointsLayoutRef} className="flex flex-col gap-4">
+                        <div className="flex gap-4">
+                            <div className="flex flex-col items-end justify-center">
+                                <h3 className="font-bold mb-2">Viewport</h3>
+                                <div ref={viewportInfoRef} className="px-2 py-1 rounded"></div>
+                            </div>
+                            <div className="flex flex-col items-end justify-center">
+                                <InteractionModality />
+                            </div>
                         </div>
                         <div className="flex flex-col items-end justify-center">
-                            <InteractionModality />
+                            <h3 className="flex font-bold mb-2">Optimal?</h3>
+                            <div ref={optimalExperienceInfoRef} className="flex items-center justify-center gap-2 px-2 py-1 rounded">
+                                <span ref={optimalDescriptionRef} className="flex text-right hidden"></span>
+                                <span ref={optimalIconRef} className="flex items-center justify-center"></span>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex flex-col items-end justify-center">
-                        <h3 className="flex font-bold mb-2">Optimal?</h3>
-                        <div ref={optimalExperienceInfoRef} className="flex items-center justify-center gap-2 px-2 py-1 rounded">
-                            <span ref={optimalDescriptionRef} className="flex text-right hidden"></span>
-                            <span ref={optimalIconRef} className="flex items-center justify-center"></span>
-                        </div>
-                    </div>
                 </div>
-            </div>
+            </LayoutCorner>
         )}
 
-      <div
-        className="flex justify-center items-center fixed top-2 left-2 bg-teal-500/70 text-white rounded-lg text-center shadow-md p-2"
-      >
-        <h2 className="text-4xl">🚧 Under Construction</h2>
-      </div> 
+        <LayoutCorner {...{ 
+            corner: 'top-left',
+            background: {
+                default: 'bg-teal-500/70',
+                hover: 'hover:bg-teal-500/70'
+            },
+            border: {
+                default: 'border border-none',
+                hover: 'hover:border-none'
+            }
+        }}>
+            <div
+                className="text-center p-2"
+            >
+                <h2 className="text-4xl">🚧 Under Construction</h2>
+            </div> 
+        </LayoutCorner>
+
+        <WDYDTW data={wdydtwData} today={today} />
       
       {children}
     </div>

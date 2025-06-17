@@ -1,2 +1,2 @@
-import { Layout } from './Layout';
-export { Layout }; 
+export { Layout } from './Layout.tsx';
+export { LayoutCorner } from './LayoutCorner.tsx';
