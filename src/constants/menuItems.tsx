@@ -2,14 +2,14 @@ import { FaGithub, FaLinkedin } from "react-icons/fa"
 import { type MenuItemType } from "../types"
 
 export const menuItems: MenuItemType[] = [
-    { 
-      type: "Project",
-      isLive: true,
-      label: "🧠 Learn Like Me",
-      hex: "6862F0",
-      href: "https://llm.reedturgeon.com",
-      segments: [13],
-    },
+    // { 
+    //   type: "Project",
+    //   isLive: true,
+    //   label: "🧠 Learn Like Me",
+    //   hex: "6862F0",
+    //   href: "https://llm.reedturgeon.com",
+    //   segments: [13],
+    // },
     { 
       type: "Project",
       isLive: false,
