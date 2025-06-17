@@ -13,7 +13,7 @@ const today = new Date()
 
 <Layout title="Reed Turgeon" debug={DEBUG}>
   <!-- Game of Life Background -->
-  <GameOfLife client:load />
+  <!-- <GameOfLife client:load /> -->
   
   <main class={cx(
     "relative z-10", 
@@ -21,10 +21,10 @@ const today = new Date()
     'w-full h-full',
     "items-center justify-center", 
   )}>
-    <CircularMenu menuItems={menuItems} client:load />
+    <!-- <CircularMenu menuItems={menuItems} client:load /> -->
 
     <!-- What Did You Do This Week? -->
-    <WDYDTW client:load data={wdydtwData} today={today} />
+    <!-- <WDYDTW client:load data={wdydtwData} today={today} /> -->
   </main>
 
 </Layout>

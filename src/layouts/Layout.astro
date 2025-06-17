@@ -1,16 +1,13 @@
 ---
 import GoogleAnalytics from '../components/GoogleAnalytics.astro';
-import InteractionModality from '../components/InteractionModality';
-
-import { IoClose } from "react-icons/io5";
+import { Layout as ReactLayout } from '../components/Layout';
 
 interface Props {
 	title: string;
 	debug?: boolean;
-	showBreakpoints?: boolean;
 }
 
-const { title, debug = false, showBreakpoints = true } = Astro.props;
+const { title, debug = false } = Astro.props;
 import '../styles/global.css';
 ---
 
@@ -26,168 +23,9 @@ import '../styles/global.css';
 		<title>{title}</title>
 	</head>
 	
-	<body class:list={[
-		'bg-black',
-		"relative min-h-screen flex flex-col items-center justify-center m-0 p-0 font-sans",
-		// Debug borders with different colors for each breakpoint
-		debug && [
-			"border-4 border-gray-400",
-			"portrait-mobile:border-blue-400",
-			"portrait-tablet:border-green-400",
-			"portrait-laptop:border-purple-400",
-			"landscape-mobile:border-yellow-400",
-			"landscape-tablet:border-red-400",
-			"landscape-desktop:border-pink-400",
-		]
-	]}>
-		<button
-			id="toggleBreakpoints"
-			class="fixed right-2 top-2 bg-teal-500 text-white rounded-lg px-3 py-1 text-sm transition-colors hidden z-40"
-		>
-			?
-		</button>
-
-		<div 
-			id="breakpointsInfo"
-			class="fixed right-2 top-2 bg-teal-500/70 text-white rounded-lg text-xs p-4 cursor-pointer min-w-fit ml-2 z-40"
-		>
-			<div class="absolute top-2 left-2">
-				<IoClose />
-			</div>
-			<div id="breakpointsLayout" class="flex flex-col gap-4">
-				<div class="flex gap-4">
-					<div class="flex flex-col items-end justify-center">
-						<h3 class="font-bold mb-2">Viewport</h3>
-						<div id="viewportInfo" class="px-2 py-1 rounded"></div>
-					</div>
-					<div class="flex flex-col items-end justify-center">
-						<InteractionModality client:load />
-					</div>
-				</div>
-				<div class="flex flex-col items-end justify-center">
-					<h3 class="flex font-bold mb-2">Optimal?</h3>
-					<div id="optimalExperienceInfo" class="flex items-center justify-center gap-2 px-2 py-1 rounded">
-						<span id="optimalDescription" class="flex text-right hidden"></span>
-						<span id="optimalIcon" class="flex items-center justify-center"></span>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div
-			class="flex justify-center items-center fixed top-2 left-2 bg-teal-500/70 text-white rounded-lg text-center shadow-md p-2"
-		>
-			<h2 class="text-4xl">🚧 Under Construction</h2>
-		</div> 
-		
-		<slot />
- 
-		<script>
-			const toggleBtn = document.getElementById('toggleBreakpoints');
-			const breakpointsInfo = document.getElementById('breakpointsInfo');
-			const viewportInfo = document.getElementById('viewportInfo');
-			
-			let isVisible = false;
-			toggleBtn.style.display = isVisible ? 'none' : 'block';
-			breakpointsInfo.style.display = isVisible ? 'block' : 'none';
-
-			function getBreakpointInfo(width: number, orientation: string) {
-				if (orientation === 'portrait') {
-					if (width < 480) return { name: 'Base', color: 'rgb(156, 163, 175)' }; // gray-400
-					if (width < 834) return { name: 'Mobile', color: 'rgb(96, 165, 250)' }; // blue-400
-					if (width < 1440) return { name: 'Tablet', color: 'rgb(74, 222, 128)' }; // green-400
-					return { name: 'Laptop', color: 'rgb(192, 132, 252)' }; // purple-400
-				} else {
-					if (width < 768) return { name: 'Base', color: 'rgb(156, 163, 175)' }; // gray-400
-					if (width < 1024) return { name: 'Mobile', color: 'rgb(250, 204, 21)' }; // yellow-400
-					if (width < 1440) return { name: 'Tablet', color: 'rgb(248, 113, 113)' }; // red-400
-					return { name: 'Desktop', color: 'rgb(244, 114, 182)' }; // pink-400
-				}
-			}
-
-			function updateViewportInfo() {
-				const width = window.innerWidth;
-				const height = window.innerHeight;
-				const orientation = width > height ? 'Landscape' : 'Portrait';
-				const { name, color } = getBreakpointInfo(width, orientation.toLowerCase());
-				viewportInfo.textContent = `${name} : ${orientation} (${width}px × ${height}px)`;
-				viewportInfo.style.backgroundColor = color;
-
-				// Update optimal experience based on viewport and interaction
-				const optimalExperienceInfo = document.getElementById('optimalExperienceInfo');
-				const optimalDescription = document.getElementById('optimalDescription');
-				const optimalIcon = document.getElementById('optimalIcon');
-				const interactionModality = document.body.getAttribute('data-interaction-modality') || 'mouse';
-				
-				const touchMessage = 'UI is built for 🖱️ Mouse interactions';
-
-				const breakpointsLayout = document.getElementById('breakpointsLayout');
-				
-				// Small width handling
-				if (width < 400) {
-					optimalDescription.textContent = 'Width incompatible w/ Circular Menu (V2)';
-					if (interactionModality === 'touch') {
-						optimalDescription.textContent += ` • ${touchMessage}`;
-					}
-					optimalDescription.classList.remove('hidden');
-					optimalIcon.textContent = '🔴';
-					optimalExperienceInfo.style.backgroundColor = 'rgb(239 68 68)';
-					breakpointsLayout.classList.remove('flex-row');
-					breakpointsLayout.classList.add('flex-col');
-					return;
-				} else if (width < 525) {
-					if (interactionModality === 'mouse') {
-						optimalDescription.textContent = '';
-						optimalDescription.classList.add('hidden');
-						optimalIcon.textContent = '🟡';
-						optimalExperienceInfo.style.backgroundColor = 'rgb(234 179 8)';
-						breakpointsLayout.classList.remove('flex-col');
-						breakpointsLayout.classList.add('flex-row');
-					} else {
-						optimalDescription.textContent = `${touchMessage}`;
-						optimalDescription.classList.remove('hidden');
-						optimalIcon.textContent = '🔴';
-						optimalExperienceInfo.style.backgroundColor = 'rgb(239 68 68)';
-						breakpointsLayout.classList.remove('flex-row');
-						breakpointsLayout.classList.add('flex-col');
-					}
-					return;
-				}
-
-				// Non-mouse interactions can only be yellow or red
-				if (interactionModality !== 'mouse') {
-					optimalDescription.textContent = touchMessage;
-					optimalDescription.classList.remove('hidden');
-					optimalIcon.textContent = '🟡';
-					optimalExperienceInfo.style.backgroundColor = 'rgb(234 179 8)';
-					breakpointsLayout.classList.remove('flex-row');
-					breakpointsLayout.classList.add('flex-col');
-					return;
-				}
-
-				// Mouse interactions on screens >= 525px get green
-				optimalDescription.textContent = '';
-				optimalDescription.classList.add('hidden');
-				optimalIcon.textContent = '🟢';
-				optimalExperienceInfo.style.backgroundColor = 'rgb(34 197 94)';
-				breakpointsLayout.classList.remove('flex-col');
-				breakpointsLayout.classList.add('flex-row');
-			}
-
-			updateViewportInfo();
-			window.addEventListener('resize', updateViewportInfo);
-
-			breakpointsInfo.addEventListener('click', () => {
-				isVisible = false;
-				toggleBtn.style.display = 'block';
-				breakpointsInfo.style.display = 'none';
-			});
-
-			toggleBtn.addEventListener('click', () => {
-				isVisible = true;
-				toggleBtn.style.display = 'none';
-				breakpointsInfo.style.display = 'block';
-			});
-		</script>
+	<body>
+		<ReactLayout debug={debug} client:load>
+			<slot />
+		</ReactLayout>
 	</body>
 </html>
