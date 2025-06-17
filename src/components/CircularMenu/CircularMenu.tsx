@@ -49,11 +49,6 @@ const CircularMenuV2 = ({
     const [isHoveringMenuItem, setIsHoveringMenuItem] = useState<boolean>(false)
     const [isHoveringCornerElement, setIsHoveringCornerElement] = useState<boolean>(false)
 
-    // STATE > confetti
-    const [showConfetti, setShowConfetti] = useState<boolean>(false)
-    const [lastClickTime, setLastClickTime] = useState<number>(0)
-    const [clickPosition, setClickPosition] = useState<Point>({ x: 0, y: 0 })
-
     // HOOKS
     const { 
         isTouchOnly, 
@@ -215,26 +210,9 @@ const CircularMenuV2 = ({
         }
     }
 
-    // METHODS > animations
-    const handleClick = useCallback((e: MouseEvent) => {
-        if (mouseInMenu || !mouseInViewport) return
-        
-        const now = Date.now()
-        if (now - lastClickTime < 1000) return // 3 second debounce
-        
-        setLastClickTime(now)
-        setClickPosition({ x: e.clientX, y: e.clientY })
-        setShowConfetti(true)
-    }, [mouseInMenu, mouseInViewport, lastClickTime])
-
     const handleMenuItemHover = useCallback((isHovering: boolean) => {
         setIsHoveringMenuItem(isHovering)
     }, [])
-
-    useEffect(() => {
-        window.addEventListener('click', handleClick)
-        return () => window.removeEventListener('click', handleClick)
-    }, [handleClick])
 
     // Check if hovering over any corner UI elements
     useEffect(() => {
@@ -342,6 +320,8 @@ const CircularMenuV2 = ({
                     /> */}
                 </div>
             )}
+
+            <ClickConfetti disabled={mouseInMenu || !mouseInViewport || isHoveringCornerElement} />
 
             {!mouseInMenu && mouseInViewport && mousePosition && syntheticCursorPosition && !isHoveringMenuItem && !isHoveringCornerElement && (
                 <div 
@@ -470,13 +450,6 @@ const CircularMenuV2 = ({
                     </g>
                 ))}
             </svg>
-
-            {showConfetti && (
-                <ClickConfetti
-                    position={clickPosition}
-                    onAnimationComplete={() => setShowConfetti(false)}
-                />
-            )}
         </div>
     )
 }

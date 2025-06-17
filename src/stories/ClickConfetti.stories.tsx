@@ -1,57 +1,44 @@
-import React, { useState } from 'react'
+import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
+import {
+  Title,
+  Description,
+  Controls,
+} from '@storybook/addon-docs/blocks'
 import ClickConfetti from '../components/Animations/ClickConfetti'
-import { type Point } from '../types'
 
 const meta: Meta<typeof ClickConfetti> = {
   title: 'Animations/ClickConfetti',
   component: ClickConfetti,
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Controls />
+        </>
+      ),
+    },
   },
   tags: ['autodocs'],
 }
 
 export default meta
 
-const InteractiveStory = () => {
-  const [confetti, setConfetti] = useState<{ id: number, position: Point }[]>(
-    [],
-  )
+type Story = StoryObj<typeof meta>
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setConfetti(currentConfetti => [
-      ...currentConfetti,
-      {
-        id: Date.now(),
-        position: { x: event.clientX, y: event.clientY },
-      },
-    ])
-  }
-
-  const handleAnimationComplete = (id: number) => {
-    setConfetti(currentConfetti => currentConfetti.filter(c => c.id !== id))
-  }
-
-  return (
-    <div
-      style={{ width: '100vw', height: '100vh', cursor: 'pointer' }}
-      onClick={handleClick}
-    >
+export const Default: Story = {
+  render: (args) => (
+    <div style={{ width: '100vw', height: '100vh', cursor: 'pointer' }}>
       <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
         Click anywhere to see confetti!
       </div>
-      {confetti.map(({ id, position }) => (
-        <ClickConfetti
-          key={id}
-          position={position}
-          onAnimationComplete={() => handleAnimationComplete(id)}
-        />
-      ))}
+      <ClickConfetti {...args} />
     </div>
-  )
-}
-
-export const Default: StoryObj<typeof meta> = {
-  render: () => <InteractiveStory />,
+  ),
+  args: {
+    colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'],
+    disabled: false,
+  },
 }
