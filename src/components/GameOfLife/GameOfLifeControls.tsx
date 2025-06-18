@@ -22,6 +22,7 @@ export const GameOfLifeControls = ({
   onReset,
   onClear,
   onSpeedChange,
+  className,
 }: GameOfLifeControlsProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -30,11 +31,12 @@ export const GameOfLifeControls = ({
       'fixed bottom-4 left-4',
       'text-white rounded-lg',
       'transition-all duration-300',
+      className,
     )}>
       {isCollapsed ? (
         <button
           onClick={() => setIsCollapsed(false)}
-          className="p-2 text-xs rounded-lg transition-colors bg-teal-500"
+          className="p-2 text-xs rounded-lg transition-colors bg-teal-500/70"
           title="Game of Life Controls"
         >
           🎮

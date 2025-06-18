@@ -1,5 +1,5 @@
+import React from 'react'
 import cx from 'classnames'
-import { useState, useEffect } from 'react'
 import { useMemo } from 'react'
 import type { WeeklySubmissionData } from '../../types'
 import moment from 'moment'
@@ -37,7 +37,7 @@ const WeeklySubmission = ({
       className={cx(
         'w-[90%]',
         'bg-white',
-        'border-2 border-teal-500',
+        'border-2 border-gray-400/60',
         'p-2',
         'rounded',
         'transition-all duration-500 ease-in-out',

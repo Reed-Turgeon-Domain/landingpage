@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import React, { type ReactNode } from 'react'
 
 export type Point = {
   x: number
@@ -17,7 +17,9 @@ export interface MenuItemType {
   label: string
   href?: string
   hex?: string
-  iconType?: "github" | "linkedin" | "email"
+  backgroundColor?: string
+  iconColor?: string
+  Icon?: React.ReactNode
   segments: number[]
 }
 

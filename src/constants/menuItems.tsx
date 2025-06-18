@@ -1,15 +1,22 @@
+import React from "react"
+
+// ICONS
 import { FaGithub, FaLinkedin } from "react-icons/fa"
 import { type MenuItemType } from "../types"
+import { MdAlternateEmail } from "react-icons/md"
+import { BsSubstack } from "react-icons/bs";
 
 export const menuItems: MenuItemType[] = [
-    // { 
-    //   type: "Project",
-    //   isLive: true,
-    //   label: "🧠 Learn Like Me",
-    //   hex: "6862F0",
-    //   href: "https://llm.reedturgeon.com",
-    //   segments: [13],
-    // },
+    { 
+      type: "Project",
+      isLive: true,
+      label: "🧠 Substack",
+      Icon: <BsSubstack size={24} />,
+      backgroundColor: 'white',
+      iconColor: 'orange',
+      href: "https://llm.reedturgeon.com",
+      segments: [13],
+    },
     { 
       type: "Project",
       isLive: false,
@@ -52,23 +59,27 @@ export const menuItems: MenuItemType[] = [
       isLive: true,
       label: "LinkedIn",
       href: "https://www.linkedin.com/in/reedturgeon",
-      iconType: "linkedin",
+      Icon: <FaLinkedin size={24} />,
       segments: [2],
+      backgroundColor: 'white',
+      iconColor: '#0A66C2'
     },
     { 
       type: "Social",
       isLive: true,
       label: "GitHub", 
       href: "https://github.com/MrT3313",
-      iconType: "github",
+      Icon: <FaGithub size={24} />,
       segments: [3],
+      backgroundColor: 'white',
+      iconColor: 'black'
     },
     { 
       type: "Personal",
       isLive: true,
       label: "Reach Out",
       href: "mailto:turgeon.dev+reedturgeon.com@gmail.com",
-      iconType: "email",
+      Icon: <MdAlternateEmail size={24} />,
       segments: [8],
     },
 ]

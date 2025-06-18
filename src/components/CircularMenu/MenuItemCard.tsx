@@ -88,25 +88,6 @@ const MenuItemCard = ({
         setIsSyntheticHovering(isColliding)
     }, [syntheticPosition, isMouseHovering])
 
-    
-    const renderIcon = (iconType: "github" | "linkedin" | "email") => {
-        // TODO: BUG (icon rendering) - 👀 this is driving me up a wall
-        //                  why cant I just have an Icon: <FaGithub size={24} /> in the const menuItems array 
-        //                  and render <Icon /> or <item.Icon/>?
-        const iconProps = { 
-            size: 24,
-        }
-        
-        switch (iconType) {
-            case "github":
-                return <FaGithub {...iconProps} />
-            case "linkedin":
-                return <FaLinkedin {...iconProps} />
-            case "email":
-                return <MdAlternateEmail {...iconProps} />
-        }
-    }
-
     return (
         <div 
             ref={containerRef}
@@ -123,35 +104,23 @@ const MenuItemCard = ({
         >
             <div 
                 style={{ 
-                    backgroundColor: item?.hex ? `#${item.hex}` : 'white',
-                    color: item?.hex && 'white',
-                    opacity: interactionModality === 'touch' ? 1 : (isMouseHovering ? 1 : opacity)
+                    backgroundColor: item.href ? 'transparent' : (item?.hex ? `#${item.hex}` : 'white'),
+                    color: item.href ? 'inherit' : (item?.hex && 'white'),
                 }}
                 className={cx(
                     "flex flex-col items-center justify-center",
                     "gap-2 px-2 py-1", 
-                    "rounded-md shadow-md",
+                    "rounded-md",
                     "transition-all duration-150",
                     "pointer-events-auto",
                     {
                         "cursor-pointer": item.href,
+                        "shadow-md": !item.href
                     }
                 )}
             >
                 {item.href ? (
-                    <a 
-                        href={item.href}
-                        className={cx(
-                            "no-underline hover:opacity-80",
-                            "flex items-center gap-2",
-                            "pointer-events-auto",
-                            "cursor-pointer"
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {item.iconType ? renderIcon(item.iconType) : item.label}
-                    </a>
+                    <Item {...{ item }} />
                 ) : (
                     <span className="text-nowrap">
                         {item.label}
@@ -159,6 +128,31 @@ const MenuItemCard = ({
                 )}
             </div>
         </div>
+    )
+}
+
+export const Item = ({ item }: {item: MenuItemType}) => {
+    return (
+        <a 
+            href={item.href}
+            style={{
+                backgroundColor: item.backgroundColor || (item?.hex ? `#${item.hex}` : 'white'),
+                color: item.iconColor || (item?.hex ? 'white' : 'black')
+            }}
+            className={cx(
+                "no-underline",
+                "flex items-center gap-2",
+                "pointer-events-auto",
+                "cursor-pointer",
+                {"p-2": item.label.includes('Substack')},
+                {"px-2 py-1": !item.label.includes('Substack')},
+                "rounded-md shadow-md"
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            {item.Icon ? item.Icon : item.label}
+        </a>
     )
 }
 

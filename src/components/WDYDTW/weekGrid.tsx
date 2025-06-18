@@ -1,4 +1,4 @@
-import cx from 'classnames'
+import React from 'react'
 
 const WeekGrid = () => {
   return (
