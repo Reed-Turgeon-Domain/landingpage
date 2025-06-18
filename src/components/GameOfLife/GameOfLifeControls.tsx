@@ -36,7 +36,7 @@ export const GameOfLifeControls = ({
       {isCollapsed ? (
         <button
           onClick={() => setIsCollapsed(false)}
-          className="p-2 text-xs rounded-lg transition-colors bg-teal-500"
+          className="p-2 text-xs rounded-lg transition-colors bg-teal-500/70"
           title="Game of Life Controls"
         >
           🎮
