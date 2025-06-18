@@ -110,11 +110,12 @@ const MenuItemCard = ({
                 className={cx(
                     "flex flex-col items-center justify-center",
                     "gap-2 px-2 py-1", 
-                    "rounded-md shadow-md",
+                    "rounded-md",
                     "transition-all duration-150",
                     "pointer-events-auto",
                     {
                         "cursor-pointer": item.href,
+                        "shadow-md": !item.href
                     }
                 )}
             >
@@ -139,11 +140,11 @@ export const Item = ({ item }: {item: MenuItemType}) => {
                 color: item?.hex ? 'white' : 'black'
             }}
             className={cx(
-                "no-underline hover:opacity-80",
+                "no-underline",
                 "flex items-center gap-2",
                 "pointer-events-auto",
                 "cursor-pointer",
-                "px-2 py-1 rounded-md"
+                "px-2 py-1 rounded-md shadow-md"
             )}
             target="_blank"
             rel="noopener noreferrer"

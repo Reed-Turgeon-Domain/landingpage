@@ -62,3 +62,10 @@ export const Hourglass: Story = {
     item: hourglassItem,
   },
 };
+
+const follyoItem = menuItems.find(item => item.label.includes('FOLLYo'));
+export const FOLLYo: Story = {
+    args: {
+        item: follyoItem,
+    },
+};
