@@ -1,5 +1,5 @@
+import React, { useState, useRef, useEffect } from 'react'
 import cx from 'classnames'
-import { useState, useRef, useEffect } from 'react'
 import type { WeeklySubmissionData } from '../../types'
 import moment from 'moment'
 
@@ -175,6 +175,7 @@ const WDYDTW = ({
         'items-center',
         'px-4',
         'transition-all duration-300 ease-in-out',
+        'border-l-2 border-teal-500',
         {
           'flex-1': isOpen,
           'h-0': !isOpen,
