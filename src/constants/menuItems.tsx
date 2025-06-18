@@ -1,17 +1,22 @@
+import React from "react"
+
+// ICONS
 import { FaGithub, FaLinkedin } from "react-icons/fa"
 import { type MenuItemType } from "../types"
 import { MdAlternateEmail } from "react-icons/md"
-import React from "react"
+import { BsSubstack } from "react-icons/bs";
 
 export const menuItems: MenuItemType[] = [
-    // { 
-    //   type: "Project",
-    //   isLive: true,
-    //   label: "🧠 Learn Like Me",
-    //   hex: "6862F0",
-    //   href: "https://llm.reedturgeon.com",
-    //   segments: [13],
-    // },
+    { 
+      type: "Project",
+      isLive: true,
+      label: "🧠 Substack",
+      Icon: <BsSubstack size={24} />,
+      backgroundColor: 'white',
+      iconColor: 'orange',
+      href: "https://llm.reedturgeon.com",
+      segments: [13],
+    },
     { 
       type: "Project",
       isLive: false,
@@ -56,6 +61,8 @@ export const menuItems: MenuItemType[] = [
       href: "https://www.linkedin.com/in/reedturgeon",
       Icon: <FaLinkedin size={24} />,
       segments: [2],
+      backgroundColor: 'white',
+      iconColor: 'black'
     },
     { 
       type: "Social",
@@ -64,6 +71,8 @@ export const menuItems: MenuItemType[] = [
       href: "https://github.com/MrT3313",
       Icon: <FaGithub size={24} />,
       segments: [3],
+      backgroundColor: 'white',
+      iconColor: 'black'
     },
     { 
       type: "Personal",

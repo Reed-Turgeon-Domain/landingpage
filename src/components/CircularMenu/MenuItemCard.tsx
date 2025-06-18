@@ -136,15 +136,17 @@ export const Item = ({ item }: {item: MenuItemType}) => {
         <a 
             href={item.href}
             style={{
-                backgroundColor: item?.hex ? `#${item.hex}` : 'white',
-                color: item?.hex ? 'white' : 'black'
+                backgroundColor: item.backgroundColor || (item?.hex ? `#${item.hex}` : 'white'),
+                color: item.iconColor || (item?.hex ? 'white' : 'black')
             }}
             className={cx(
                 "no-underline",
                 "flex items-center gap-2",
                 "pointer-events-auto",
                 "cursor-pointer",
-                "px-2 py-1 rounded-md shadow-md"
+                {"p-2": item.label.includes('Substack')},
+                {"px-2 py-1": !item.label.includes('Substack')},
+                "rounded-md shadow-md"
             )}
             target="_blank"
             rel="noopener noreferrer"

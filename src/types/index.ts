@@ -17,6 +17,8 @@ export interface MenuItemType {
   label: string
   href?: string
   hex?: string
+  backgroundColor?: string
+  iconColor?: string
   Icon?: React.ReactNode
   segments: number[]
 }

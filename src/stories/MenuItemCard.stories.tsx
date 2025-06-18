@@ -49,6 +49,13 @@ export const GitHub: Story = {
   },
 };
 
+const substackItem = menuItems.find(item => item.label.includes('Substack'));
+export const Substack: Story = {
+    args: {
+        item: substackItem,
+    },
+};
+
 const reachOutItem = menuItems.find(item => item.label === 'Reach Out');
 export const ReachOut: Story = {
   args: {
