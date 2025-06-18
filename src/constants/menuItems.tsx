@@ -62,7 +62,7 @@ export const menuItems: MenuItemType[] = [
       Icon: <FaLinkedin size={24} />,
       segments: [2],
       backgroundColor: 'white',
-      iconColor: 'black'
+      iconColor: '#0A66C2'
     },
     { 
       type: "Social",
