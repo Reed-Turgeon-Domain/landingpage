@@ -1,25 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import { CircularMenu } from '../components/CircularMenu/index'
-import { WDYDTW } from '../components/WDYDTW/index'
-import GameOfLife from '../components/GameOfLife/index'
-import { menuItems } from '../constants/menuItems'
-import { wdydtwData } from '../components/WDYDTW/mock'
 import cx from 'classnames'
 
 const DEBUG = false
 const today = new Date()
 ---
 
-<Layout title="Reed Turgeon" debug={DEBUG}>  
-  <main class={cx(
-    "relative z-10", 
-    "flex-1 flex flex-col", 
-    'w-full h-full',
-    "items-center justify-center", 
-  )}>
-    <!-- <CircularMenu menuItems={menuItems} client:load /> -->
-
-  </main>
-
-</Layout>
+<Layout title="Reed Turgeon" debug={DEBUG} />
