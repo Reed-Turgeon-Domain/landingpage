@@ -10,6 +10,8 @@ import InteractionModality from '../InteractionModality';
 import { WDYDTW } from '../WDYDTW';
 import { wdydtwData } from '../WDYDTW/mock';
 import { GameOfLife } from '../GameOfLife';
+import { CircularMenu } from '../CircularMenu';
+import { menuItems } from '../../constants/menuItems';
 
 interface LayoutProps {
   debug?: boolean;
@@ -140,6 +142,8 @@ export const Layout: React.FC<LayoutProps> = ({ debug = true, children }) => {
         ],
     )}>
         <GameOfLife zIndex="z-0" />
+
+        <CircularMenu menuItems={menuItems} />
 
         {!isBreakpointsVisible ? (
             <LayoutCorner {...{ 
