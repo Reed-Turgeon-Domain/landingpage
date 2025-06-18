@@ -22,6 +22,7 @@ export const GameOfLifeControls = ({
   onReset,
   onClear,
   onSpeedChange,
+  className,
 }: GameOfLifeControlsProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -30,6 +31,7 @@ export const GameOfLifeControls = ({
       'fixed bottom-4 left-4',
       'text-white rounded-lg',
       'transition-all duration-300',
+      className,
     )}>
       {isCollapsed ? (
         <button

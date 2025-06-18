@@ -139,7 +139,7 @@ export const Layout: React.FC<LayoutProps> = ({ debug = true, children }) => {
             "landscape-desktop:border-pink-400",
         ],
     )}>
-        <GameOfLife zIndex="z-1" />
+        <GameOfLife zIndex="z-0" />
 
         {!isBreakpointsVisible ? (
             <LayoutCorner {...{ 
