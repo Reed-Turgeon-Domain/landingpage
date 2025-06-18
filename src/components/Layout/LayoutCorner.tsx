@@ -58,8 +58,7 @@ export const LayoutCorner: React.FC<LayoutCornerProps> = ({
       default: 'border border-none',
       hover: 'hover:border-none'
   },
-  inset = 2,
-  // className,
+  inset = 2
 }) => {
 
   return (
