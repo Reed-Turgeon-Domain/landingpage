@@ -14,7 +14,7 @@ export const menuItems: MenuItemType[] = [
       Icon: <BsSubstack size={24} />,
       backgroundColor: 'white',
       iconColor: 'orange',
-      href: "https://llm.reedturgeon.com",
+      href: "https://reedturgeon.substack.com/",
       segments: [13],
     },
     { 
