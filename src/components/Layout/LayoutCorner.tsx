@@ -51,12 +51,12 @@ export const LayoutCorner: React.FC<LayoutCornerProps> = ({
   children,
   corner,
   background = {
-    default: 'bg-transparent',
+    default: 'bg-teal-500/70',
     hover: 'hover:bg-teal-500/70'
   },
   border = {
-    default: 'border-1 border-white',
-    hover: 'hover:border-none'
+      default: 'border border-none',
+      hover: 'hover:border-none'
   },
   inset = 2,
   // className,

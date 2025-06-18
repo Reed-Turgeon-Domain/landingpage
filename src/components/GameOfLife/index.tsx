@@ -34,7 +34,7 @@ interface GameOfLifeProps {
 }
 
 // Game of Life component with direct imperative code
-const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
+export const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
   // Component state
   const [grid, setGrid] = useState<GameGrid>(createEmptyGrid(1, 1));
   const [generation, setGeneration] = useState(0);
@@ -345,5 +345,3 @@ const GameOfLife = ({ zIndex = '-z-1' }: GameOfLifeProps) => {
     </div>
   );
 };
-
-export default GameOfLife;

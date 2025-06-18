@@ -9,6 +9,8 @@ import { LayoutCorner } from './LayoutCorner';
 import InteractionModality from '../InteractionModality';
 import { WDYDTW } from '../WDYDTW';
 import { wdydtwData } from '../WDYDTW/mock';
+import { GameOfLife } from '../GameOfLife';
+
 interface LayoutProps {
   debug?: boolean;
   children: React.ReactNode;
@@ -137,8 +139,16 @@ export const Layout: React.FC<LayoutProps> = ({ debug = true, children }) => {
             "landscape-desktop:border-pink-400",
         ],
     )}>
+        <GameOfLife zIndex="z-1" />
+
         {!isBreakpointsVisible ? (
-            <LayoutCorner {...{ corner: 'top-right' }}>
+            <LayoutCorner {...{ 
+                corner: 'top-right',
+                background: {
+                    default: 'bg-teal-500/70',
+                    hover: 'hover:bg-teal-500/90'
+                }
+            }}>
                 <button
                     onClick={() => setBreakpointsVisible(true)}
                     className="flex px-3 py-1 text-sm hover:cursor-pointer"
@@ -178,15 +188,7 @@ export const Layout: React.FC<LayoutProps> = ({ debug = true, children }) => {
         )}
 
         <LayoutCorner {...{ 
-            corner: 'top-left',
-            background: {
-                default: 'bg-teal-500/70',
-                hover: 'hover:bg-teal-500/70'
-            },
-            border: {
-                default: 'border border-none',
-                hover: 'hover:border-none'
-            }
+            corner: 'top-left'
         }}>
             <div
                 className="text-center p-2"
