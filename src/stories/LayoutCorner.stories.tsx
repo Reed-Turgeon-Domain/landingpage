@@ -1,11 +1,17 @@
 import React from 'react';
-import { LayoutCorner } from '../components/Layout';
 import type { Meta, StoryObj } from '@storybook/react';
+import {
+  Title,
+  Description,
+  Controls,
+} from '@storybook/addon-docs/blocks'
+
+// COMPONENTS
+import { LayoutCorner } from '../components/Layout';
 
 const meta: Meta<typeof LayoutCorner> = {
   title: 'Layout/LayoutCorner',
   component: LayoutCorner,
-  tags: ['autodocs'],
   argTypes: {
     corner: {
       control: 'select',
@@ -31,12 +37,18 @@ const meta: Meta<typeof LayoutCorner> = {
   parameters: {
     layout: 'fullscreen',
   },
+  tags: ['autodocs'],
 };
 
 export default meta;
 type Story = StoryObj<typeof LayoutCorner>;
 
 export const TopLeft: Story = {
+  render: (args) => (
+    <div className="relative w-full h-[200px]">
+      <LayoutCorner {...args} />
+    </div>
+  ),
   args: {
     corner: 'top-left',
     inset: 4,
@@ -45,6 +57,11 @@ export const TopLeft: Story = {
 };
 
 export const TopRight: Story = {
+  render: (args) => (
+    <div className="relative w-full h-[200px]">
+      <LayoutCorner {...args} />
+    </div>
+  ),
   args: {
     corner: 'top-right',
     inset: 4,
@@ -53,6 +70,11 @@ export const TopRight: Story = {
 };
 
 export const BottomLeft: Story = {
+  render: (args) => (
+    <div className="relative w-full h-[200px]">
+      <LayoutCorner {...args} />
+    </div>
+  ),
   args: {
     corner: 'bottom-left',
     inset: 4,
@@ -61,6 +83,11 @@ export const BottomLeft: Story = {
 };
 
 export const BottomRight: Story = {
+  render: (args) => (
+    <div className="relative w-full h-[200px]">
+      <LayoutCorner {...args} />
+    </div>
+  ),
   args: {
     corner: 'bottom-right',
     inset: 4,

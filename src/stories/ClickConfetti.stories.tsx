@@ -5,6 +5,8 @@ import {
   Description,
   Controls,
 } from '@storybook/addon-docs/blocks'
+
+// COMPONENTS
 import ClickConfetti from '../components/Animations/ClickConfetti'
 
 const meta: Meta<typeof ClickConfetti> = {
