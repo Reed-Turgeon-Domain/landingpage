@@ -1,5 +1,7 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa"
 import { type MenuItemType } from "../types"
+import { MdAlternateEmail } from "react-icons/md"
+import React from "react"
 
 export const menuItems: MenuItemType[] = [
     // { 
@@ -52,7 +54,7 @@ export const menuItems: MenuItemType[] = [
       isLive: true,
       label: "LinkedIn",
       href: "https://www.linkedin.com/in/reedturgeon",
-      iconType: "linkedin",
+      Icon: <FaLinkedin size={24} />,
       segments: [2],
     },
     { 
@@ -60,7 +62,7 @@ export const menuItems: MenuItemType[] = [
       isLive: true,
       label: "GitHub", 
       href: "https://github.com/MrT3313",
-      iconType: "github",
+      Icon: <FaGithub size={24} />,
       segments: [3],
     },
     { 
@@ -68,7 +70,7 @@ export const menuItems: MenuItemType[] = [
       isLive: true,
       label: "Reach Out",
       href: "mailto:turgeon.dev+reedturgeon.com@gmail.com",
-      iconType: "email",
+      Icon: <MdAlternateEmail size={24} />,
       segments: [8],
     },
 ]

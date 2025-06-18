@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Item } from '../components/CircularMenu/MenuItemCard';
-import { type MenuItemType } from '../types';
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { MdAlternateEmail } from 'react-icons/md';
+import { menuItems } from '../constants/menuItems';
 import React from 'react';
 
 const meta: Meta<typeof Item> = {
@@ -33,82 +31,34 @@ const meta: Meta<typeof Item> = {
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Item>;
 
-const githubItem: MenuItemType = {
-  type: 'Social',
-  isLive: true,
-  label: 'GitHub',
-  href: 'https://github.com/ReedTurgeon',
-  hex: '181717',
-  Icon: <FaGithub size={24} />,
-  segments: [0, 1, 2],
+// Manually create stories for each menu item with a href
+const linkedInItem = menuItems.find(item => item.label === 'LinkedIn');
+export const LinkedIn: Story = {
+  args: {
+    item: linkedInItem,
+  },
 };
 
-const emailItem: MenuItemType = {
-  type: 'Personal',
-  isLive: true,
-  label: 'Reach out',
-  href: 'mailto:reed@reedturgeon.com',
-  hex: 'D14836',
-  Icon: <MdAlternateEmail size={24} />,
-  segments: [7,8],
-};
-
-const follyoItem: MenuItemType = {
-    type: 'Project',
-    isLive: true,
-    label: 'FOLLYo',
-    href: 'https://apps.apple.com/us/app/follyo-the-app-for-follies/id6478720253',
-    hex: '1E90FF',
-    segments: [9,10]
-};
-
-const hourglassItem: MenuItemType = {
-    type: 'Project',
-    isLive: true,
-    label: 'Hourglass',
-    href: 'https://hourglass.reedturgeon.com/',
-    hex: 'FFD700',
-    segments: [11,12]
-};
-
+const githubItem = menuItems.find(item => item.label === 'GitHub');
 export const GitHub: Story = {
   args: {
     item: githubItem,
   },
 };
 
-export const Email: Story = {
-    args: {
-        item: emailItem,
-    },
+const reachOutItem = menuItems.find(item => item.label === 'Reach Out');
+export const ReachOut: Story = {
+  args: {
+    item: reachOutItem,
+  },
 };
 
-export const FOLLYo: Story = {
-    args: {
-        item: follyoItem,
-    },
-};
-
+const hourglassItem = menuItems.find(item => item.label.includes('Hourglass'));
 export const Hourglass: Story = {
-    args: {
-        item: hourglassItem,
-    },
-};
-
-const linkedInItem: MenuItemType = {
-    type: 'Social',
-    isLive: true,
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/reed-turgeon/',
-    Icon: <FaLinkedin size={24} />,
-    hex: '0A66C2',
-    segments: [5,6]
-};
-
-export const LinkedIn: Story = {
-    args: {
-        item: linkedInItem,
-    },
+  args: {
+    item: hourglassItem,
+  },
 };
