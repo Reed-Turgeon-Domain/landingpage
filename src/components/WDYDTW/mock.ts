@@ -1,6 +1,32 @@
 export const wdydtwData = [
   {
     dates:{
+      start: "2025-06-16",
+      end: "2025-06-22"
+    },
+    tasks: [
+      {
+        category: 'CODING',
+        title: 'OSS CLI NPM Package : npx slippers',
+        updates: [
+          'Initial Project Structural for published V0 : npx slippers'
+        ],
+        link: 'https://github.com/MrT3313/slippers'
+      },
+      {
+        category: 'CODING',
+        title: 'OSS CLI NPM Package : npx create-electron-foundation',
+        updates: [
+          'Comprehensive Typescript Review',
+          'BUG: Conflicting Local Directory - optional backup | delete | exit CLI',
+          'BUG: Conflicting Electron userData Directory - optional backup | delete | exit CLI',
+        ],
+        link: 'https://www.npmjs.com/package/create-electron-foundation',
+      }
+    ]
+  },
+  {
+    dates:{
       start: "2025-06-09",
       end: "2025-06-15"
     },

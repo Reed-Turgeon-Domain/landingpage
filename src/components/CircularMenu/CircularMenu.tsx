@@ -269,7 +269,7 @@ const CircularMenuV2 = ({
     // ====== //
     return (
         <div className={cx(
-            'z-100',
+            'z-70',
             "fixed inset-0 flex items-center justify-center pointer-events-none"
         )}>
             {debug && (

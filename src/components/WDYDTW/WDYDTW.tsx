@@ -135,7 +135,7 @@ const WDYDTW = ({
       ref={modalRef}
       className={cx(
         'WDYDTW',
-        'z-50',
+        'z-100',
         filteredData?.isOpen?.length > 0 ? 'flex flex-col' : 'hidden',
         'absolute bottom-0 right-0',
         'rounded-tl-lg',
