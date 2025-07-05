@@ -1,6 +1,21 @@
 export const wdydtwData = [
   {
     dates:{
+      start: "2025-06-23",
+      end: "2025-07-06"
+    },
+    tasks: [
+      {
+        category: 'PERSONAL',
+        title: 'Vacation',
+        updates: [
+          'Cape Cod, MA'
+        ]
+      }
+    ]
+  },
+  {
+    dates:{
       start: "2025-06-16",
       end: "2025-06-22"
     },
